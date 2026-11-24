@@ -1,0 +1,5 @@
+{
+  "name": "Mes Comptes Perso",
+  "description": "Application de gestion de comptes personnels, budgets, échéancier et synchronisation Google Drive.",
+  "requestFramePermissions": []
+}
