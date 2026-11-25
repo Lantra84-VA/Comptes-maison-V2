@@ -21,7 +21,70 @@
       --warn: #b45309;
       --warn-bg: #fef3c7;
       --border: #e2e8f0;
+      --row-divider: #f1f5f9;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --selected-bg: #eff6ff;
+      --selected-border: #bfdbfe;
+      --edit-bg: #e0f2fe;
+      --edit-fg: #0369a1;
+      --chip-bg: #e2e8f0;
+      --chip-hover: #cbd5e1;
+      --badge-cat-bg: #e2e8f0;
+      --badge-cat-fg: #334155;
+      --badge-sub-bg: #eff6ff;
+      --badge-sub-fg: #1d4ed8;
+      --badge-payee-bg: #f3e8ff;
+      --badge-payee-fg: #6b21a8;
+      --badge-pmt-bg: #f1f5f9;
+      --badge-pmt-fg: #0f172a;
+      --nav-bg: rgba(255, 255, 255, 0.96);
+      --header-bg: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      --chart-grid: #cbd5e1;
+      --chart-zero: #94a3b8;
+      --chart-pos: #4d7c0f;
+      --chart-neg: #dc2626;
       --radius: 12px;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0b1120;
+      --card: #111827;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #38bdf8;
+      --success: #4ade80;
+      --success-bg: rgba(34, 197, 94, 0.16);
+      --danger: #f87171;
+      --danger-bg: rgba(239, 68, 68, 0.16);
+      --warn: #fbbf24;
+      --warn-bg: rgba(245, 158, 11, 0.16);
+      --border: #1e293b;
+      --row-divider: #1e293b;
+      --input-bg: #0f172a;
+      --input-border: #334155;
+      --selected-bg: rgba(59, 130, 246, 0.16);
+      --selected-border: #1d4ed8;
+      --edit-bg: rgba(14, 165, 233, 0.18);
+      --edit-fg: #7dd3fc;
+      --chip-bg: #1e293b;
+      --chip-hover: #334155;
+      --badge-cat-bg: #1e293b;
+      --badge-cat-fg: #cbd5e1;
+      --badge-sub-bg: rgba(59, 130, 246, 0.18);
+      --badge-sub-fg: #93c5fd;
+      --badge-payee-bg: rgba(168, 85, 247, 0.2);
+      --badge-payee-fg: #d8b4fe;
+      --badge-pmt-bg: #1e293b;
+      --badge-pmt-fg: #e2e8f0;
+      --nav-bg: rgba(17, 24, 39, 0.96);
+      --header-bg: linear-gradient(135deg, #0f172a, #1e293b);
+      --chart-grid: #334155;
+      --chart-zero: #64748b;
+      --chart-pos: #4ade80;
+      --chart-neg: #f87171;
     }
 
     * { box-sizing: border-box; }
@@ -35,13 +98,13 @@
     }
 
     header {
-      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      background: var(--header-bg);
       color: #fff;
       padding: 16px 20px;
       position: sticky;
       top: 0;
       z-index: 20;
-      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.15);
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.22);
     }
 
     .header-inner {
@@ -75,6 +138,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      align-items: center;
     }
 
     button, select, input {
@@ -93,7 +157,7 @@
 
     .btn-primary {
       background: #ffffff;
-      color: var(--primary);
+      color: #1e3a8a;
     }
 
     .btn-primary:hover { background: #eff6ff; }
@@ -113,6 +177,20 @@
 
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.25); }
 
+    .btn-outline {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { background: var(--selected-bg); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
     .btn-dark {
       background: var(--primary);
       color: #fff;
@@ -121,8 +199,8 @@
     .btn-dark:hover { background: var(--primary-hover); }
 
     .btn-edit {
-      background: #e0f2fe;
-      color: #0369a1;
+      background: var(--edit-bg);
+      color: var(--edit-fg);
       padding: 5px 9px;
       font-size: 0.8rem;
     }
@@ -141,13 +219,13 @@
 
     .btn-inline-add {
       padding: 7px 10px;
-      background: #e2e8f0;
+      background: var(--chip-bg);
       color: var(--text);
       font-weight: 700;
       white-space: nowrap;
     }
 
-    .btn-inline-add:hover { background: #cbd5e1; }
+    .btn-inline-add:hover { background: var(--chip-hover); }
 
     .input-with-btn {
       display: flex;
@@ -243,7 +321,7 @@
 
     .account-item.selected {
       border-color: var(--primary);
-      background: #eff6ff;
+      background: var(--selected-bg);
     }
 
     .account-right {
@@ -269,9 +347,9 @@
     input, select {
       width: 100%;
       padding: 8px 10px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--input-border);
       border-radius: 8px;
-      background: #fff;
+      background: var(--input-bg);
       color: var(--text);
     }
 
@@ -314,14 +392,14 @@
 
     .badge-ok { background: var(--success-bg); color: var(--success); }
     .badge-wait { background: var(--warn-bg); color: var(--warn); }
-    .badge-cat { background: #e2e8f0; color: #334155; }
-    .badge-sub { background: #eff6ff; color: #1d4ed8; }
-    .badge-payee { background: #f3e8ff; color: #6b21a8; }
-    .badge-pmt { background: #f1f5f9; color: #0f172a; }
+    .badge-cat { background: var(--badge-cat-bg); color: var(--badge-cat-fg); }
+    .badge-sub { background: var(--badge-sub-bg); color: var(--badge-sub-fg); }
+    .badge-payee { background: var(--badge-payee-bg); color: var(--badge-payee-fg); }
+    .badge-pmt { background: var(--badge-pmt-bg); color: var(--badge-pmt-fg); }
 
     .progress-bar {
       height: 8px;
-      background: #e2e8f0;
+      background: var(--chip-bg);
       border-radius: 999px;
       overflow: hidden;
       margin-top: 6px;
@@ -343,10 +421,29 @@
       justify-content: space-between;
       gap: 10px;
       padding: 10px 12px;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
+      background: var(--selected-bg);
+      border: 1px solid var(--selected-border);
       border-radius: 10px;
       margin-bottom: 12px;
+    }
+
+    .auth-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--selected-bg);
+      border: 1px solid var(--selected-border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+    }
+
+    .theme-selector-group {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .chart-box {
@@ -453,7 +550,7 @@
     .ops-reset-btn {
       color: var(--text);
       border: 1px solid var(--border);
-      background: #fff;
+      background: var(--card);
     }
 
     @media (max-width: 768px) {
@@ -727,7 +824,7 @@
         margin-bottom: 10px;
         border: 1px solid var(--border);
         border-radius: 10px;
-        background: #fff;
+        background: var(--card);
       }
 
       .tx-table tbody tr.empty-row {
@@ -816,7 +913,7 @@
         margin-bottom: 10px;
         border: 1px solid var(--border);
         border-radius: 10px;
-        background: #fff;
+        background: var(--card);
       }
 
       .responsive-table:not(.tx-table) tbody td {
@@ -825,7 +922,7 @@
         align-items: center;
         gap: 10px;
         padding: 5px 0;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid var(--row-divider);
         flex-wrap: wrap;
       }
 
@@ -899,12 +996,12 @@
         z-index: 35;
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        background: rgba(255, 255, 255, 0.96);
+        background: var(--nav-bg);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border-top: 1px solid var(--border);
         padding-bottom: env(safe-area-inset-bottom);
-        box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.08);
+        box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.14);
       }
 
       .mobile-nav-btn {
@@ -931,7 +1028,7 @@
 
       .mobile-nav-btn.active {
         color: var(--primary);
-        background: #eff6ff;
+        background: var(--selected-bg);
       }
     }
 
@@ -951,30 +1048,38 @@
       <div class="brand">
         <div>
           <h1>Mes Comptes Perso</h1>
-          <div class="sync-status" id="syncStatus">Mode local actif • Prêt pour synchro Drive</div>
+          <div class="sync-status" id="syncStatus">Mode local • Connexion Cloud requise pour PC & Téléphone</div>
         </div>
       </div>
       <button type="button" id="mobileActionsToggle" class="btn-secondary mobile-actions-toggle" onclick="toggleMobileHeaderActions()" aria-expanded="false" aria-controls="headerActions">
-        Actions ▾
+        Menu ▾
       </button>
       <div class="actions" id="headerActions">
-        <button class="btn-sync" onclick="uploadToDrive()">↑ Envoyer vers Drive</button>
-        <button class="btn-secondary" onclick="downloadFromDrive()">↓ Télécharger Drive</button>
-        <button class="btn-primary" onclick="openStatementImportModal()">Importer CSV / OFX / QIF</button>
-        <button class="btn-secondary" onclick="exportJSON()">Exporter JSON</button>
-        <button class="btn-secondary" onclick="document.getElementById('importFile').click()">Importer JSON</button>
+        <button type="button" id="headerAuthBtn" class="btn-sync" onclick="handleAuthClick()">Connexion Cloud</button>
+        <button type="button" id="themeToggleBtn" class="btn-secondary" onclick="toggleTheme()" title="Changer de thème">Thème sombre</button>
+        <button type="button" class="btn-primary" onclick="openStatementImportModal()">Importer CSV / OFX / QIF</button>
+        <button type="button" class="btn-secondary" onclick="exportJSON()">Exporter JSON</button>
+        <button type="button" class="btn-secondary" onclick="document.getElementById('importFile').click()">Importer JSON</button>
         <input type="file" id="importFile" accept=".json,application/json" class="hidden" onchange="importJSON(event)" />
       </div>
     </div>
   </header>
 
   <div class="container">
+    <div id="authBanner" class="auth-banner">
+      <div>
+        <strong>Synchronisation automatique PC & Téléphone</strong>
+        <div class="muted">Connectez votre compte Google une seule fois sur chaque appareil pour retrouver vos comptes et opérations à jour en temps réel.</div>
+      </div>
+      <button type="button" class="btn-sync" onclick="signInWithGoogle()">Se connecter avec Google</button>
+    </div>
+
     <div class="tabs">
       <button class="tab active" data-tab="ops" onclick="switchTab('ops')">Opérations & Comptes</button>
       <button class="tab" data-tab="charts" onclick="switchTab('charts')">Graphiques & Budgets</button>
       <button class="tab" data-tab="budgets" onclick="switchTab('budgets')">Catégories, Sous-catégories & Tiers</button>
       <button class="tab" data-tab="echeancier" onclick="switchTab('echeancier')">Échéancier</button>
-      <button class="tab" data-tab="drive" onclick="switchTab('drive')">Paramètres & Google Drive</button>
+      <button class="tab" data-tab="drive" onclick="switchTab('drive')">Synchro & Paramètres</button>
     </div>
 
     <!-- ONGLET 1 : OPERATIONS & COMPTES -->
@@ -1100,10 +1205,10 @@
             <strong id="bulkCountLabel">0 opération sélectionnée</strong>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button type="button" class="btn-small btn-secondary" style="color:var(--text);border-color:#93c5fd;background:#fff;" onclick="bulkSetCleared(true)">Marquer pointé</button>
-            <button type="button" class="btn-small btn-secondary" style="color:var(--text);border-color:#93c5fd;background:#fff;" onclick="bulkSetCleared(false)">Marquer non pointé</button>
+            <button type="button" class="btn-small btn-outline" onclick="bulkSetCleared(true)">Marquer pointé</button>
+            <button type="button" class="btn-small btn-outline" onclick="bulkSetCleared(false)">Marquer non pointé</button>
             <button type="button" class="btn-danger" onclick="bulkDeleteTransactions()">Supprimer la sélection</button>
-            <button type="button" class="btn-small btn-secondary" style="color:var(--muted);border-color:var(--border);background:transparent;" onclick="clearSelection()">Annuler</button>
+            <button type="button" class="btn-small btn-ghost" onclick="clearSelection()">Annuler</button>
           </div>
         </div>
 
@@ -1361,27 +1466,34 @@
       </div>
     </section>
 
-    <!-- ONGLET 5 : PARAMETRES & GOOGLE DRIVE -->
+    <!-- ONGLET 5 : SYNCHRO CLOUD & PARAMETRES -->
     <section id="tab-drive" class="hidden">
       <div class="card">
-        <h2>Synchronisation Google Drive (1 clic)</h2>
-        <p class="muted">
-          Renseignez votre <strong>Client ID OAuth Web</strong> créé dans Google Cloud Console.
-          L'application enregistrera et mettra à jour le fichier <code>comptes_perso.json</code> dans votre Google Drive.
+        <h2>Synchronisation automatique PC & Téléphone (Firebase)</h2>
+        <p class="muted" id="cloudAccountDetails">
+          Connectez-vous avec votre compte Google sur votre PC et votre téléphone. Toute opération ajoutée, modifiée ou pointée est automatiquement synchronisée en temps réel sans manipulation de fichiers.
         </p>
-        <div class="form-row">
-          <div>
-            <label>Google OAuth Client ID</label>
-            <input type="text" id="googleClientId" placeholder="xxxx.apps.googleusercontent.com" />
-          </div>
-          <div>
-            <label>Nom du fichier sur Drive</label>
-            <input type="text" id="driveFileName" value="comptes_perso.json" />
-          </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+          <button type="button" id="settingsSignInBtn" class="btn-sync" onclick="signInWithGoogle()">Se connecter avec Google</button>
+          <button type="button" id="settingsSignOutBtn" class="btn-danger hidden" onclick="signOutCloud()">Se déconnecter</button>
         </div>
+      </div>
+
+      <div class="card">
+        <h2>Apparence (Thème)</h2>
+        <p class="muted">Choisissez le thème clair ou sombre. Lorsque vous êtes connecté, votre préférence est également enregistrée sur votre compte.</p>
+        <div class="theme-selector-group">
+          <button type="button" id="themeBtnLight" class="btn-outline" onclick="setTheme('light')">Thème clair</button>
+          <button type="button" id="themeBtnDark" class="btn-outline" onclick="setTheme('dark')">Thème sombre</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Sauvegarde locale (.JSON)</h2>
+        <p class="muted">Exportez vos données à tout moment au format JSON ou importez une sauvegarde existante (la sauvegarde importée est automatiquement synchronisée vers vos appareils si vous êtes connecté).</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn-dark" onclick="saveDriveConfig()">Enregistrer les paramètres</button>
-          <button class="btn-sync" onclick="syncWithGoogleDrive()">↻ Tester la synchronisation maintenant</button>
+          <button type="button" class="btn-dark" onclick="exportJSON()">Exporter en .JSON</button>
+          <button type="button" class="btn-outline" onclick="document.getElementById('importFile').click()">Importer un fichier .JSON</button>
         </div>
       </div>
     </section>
@@ -1631,15 +1743,55 @@
     </button>
     <button type="button" class="mobile-nav-btn" data-tab="drive" onclick="switchTab('drive')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-      <span>Drive</span>
+      <span>Synchro</span>
     </button>
   </nav>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      collection,
+      getDoc,
+      getDocs,
+      getDocFromServer,
+      setDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      query,
+      where,
+      writeBatch,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-  <script>
     const STORAGE_KEY = "mes_comptes_perso_v1";
-    const DRIVE_FILE_ID_KEY = "mes_comptes_drive_file_id_v1";
+    const THEME_STORAGE_KEY = "mes_comptes_theme_v1";
+
+    const OperationType = {
+      CREATE: "create",
+      UPDATE: "update",
+      DELETE: "delete",
+      LIST: "list",
+      GET: "get",
+      WRITE: "write"
+    };
+
+    let firebaseApp = null;
+    let auth = null;
+    let db = null;
+    let currentUser = null;
+    let cloudListeners = [];
+    let cloudInitialHydrationDone = false;
+    let autoInjectedForSessionKey = "";
 
     function getTodayLocalISO() {
       const now = new Date();
@@ -1649,33 +1801,70 @@
       return `${y}-${m}-${d}`;
     }
 
+    function clampStr(val, maxLen) {
+      return String(val ?? "").trim().slice(0, maxLen);
+    }
+
+    function makeSafeId(prefix, raw = "") {
+      const slug = String(raw || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9_-]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 48);
+      if (slug) return `${prefix}-${slug}`.slice(0, 128);
+      return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`.slice(0, 128);
+    }
+
+    function isValidDocId(id) {
+      return typeof id === "string" && id.length >= 1 && id.length <= 128 && /^[a-zA-Z0-9_\-]+$/.test(id);
+    }
+
+    function normalizeDateOrEmpty(raw) {
+      const s = String(raw || "").trim();
+      return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(s) ? s : "";
+    }
+
+    function ensureUniqueIds(items, prefix, nameSelector) {
+      const seen = new Set();
+      return items.map((item, idx) => {
+        const base = isValidDocId(item.id)
+          ? item.id
+          : makeSafeId(prefix, nameSelector ? nameSelector(item, idx) : String(idx + 1));
+        let candidate = base;
+        let suffix = 1;
+        while (seen.has(candidate)) {
+          candidate = `${base.slice(0, 114)}-${idx + 1}-${suffix++}`;
+        }
+        seen.add(candidate);
+        return { ...item, id: candidate };
+      });
+    }
+
     function cloneDefaultData() {
       return JSON.parse(JSON.stringify(DEFAULT_DATA));
     }
 
     const DEFAULT_DATA = {
       updatedAt: new Date().toISOString(),
+      theme: "light",
       selectedAccountId: "ALL",
-      driveConfig: {
-        clientId: "",
-        fileName: "comptes_perso.json"
-      },
       accounts: [
         { id: "acc-courant", name: "Compte Courant", initialBalance: 1200 },
         { id: "acc-livret", name: "Livret Épargne", initialBalance: 4500 }
       ],
       paymentMethods: ["Carte bancaire", "Chèque", "Virement", "Prélèvement"],
       categories: [
-        { name: "Alimentation", budget: 450, subcategories: ["Supermarché", "Boulangerie", "Restaurant"] },
-        { name: "Logement", budget: 850, subcategories: ["Loyer", "Charges", "Travaux"] },
-        { name: "Automobile", budget: 180, subcategories: ["Carburant", "Parking", "Entretien", "Assurance"] },
-        { name: "Factures / Énergie", budget: 160, subcategories: ["Électricité", "Eau", "Internet / Téléphone"] },
-        { name: "Abonnements & Loisirs", budget: 120, subcategories: ["Streaming", "Sorties", "Sport"] },
-        { name: "Revenus", budget: 0, subcategories: ["Salaire", "Remboursement"] }
+        { id: "cat-alimentation", name: "Alimentation", budget: 450, subcategories: ["Supermarché", "Boulangerie", "Restaurant"] },
+        { id: "cat-logement", name: "Logement", budget: 850, subcategories: ["Loyer", "Charges", "Travaux"] },
+        { id: "cat-automobile", name: "Automobile", budget: 180, subcategories: ["Carburant", "Parking", "Entretien", "Assurance"] },
+        { id: "cat-factures-energie", name: "Factures / Énergie", budget: 160, subcategories: ["Électricité", "Eau", "Internet / Téléphone"] },
+        { id: "cat-abonnements-loisirs", name: "Abonnements & Loisirs", budget: 120, subcategories: ["Streaming", "Sorties", "Sport"] },
+        { id: "cat-revenus", name: "Revenus", budget: 0, subcategories: ["Salaire", "Remboursement"] }
       ],
       payees: [
-        { name: "Netflix", defaultCategory: "Abonnements & Loisirs" },
-        { name: "Électricité / Gaz", defaultCategory: "Factures / Énergie" }
+        { id: "payee-netflix", name: "Netflix", defaultCategory: "Abonnements & Loisirs" },
+        { id: "payee-electricite-gaz", name: "Électricité / Gaz", defaultCategory: "Factures / Énergie" }
       ],
       transactions: [
         {
@@ -1706,71 +1895,737 @@
           subcategory: "Électricité",
           payee: "Électricité / Gaz",
           label: "Électricité / Gaz",
+          startDate: "",
           unlimited: true,
           endDate: ""
         }
       ]
     };
 
-    let state = loadLocalData();
-    let googleAccessToken = null;
-    let selectedTxIds = new Set();
+    function normalizeStateShape(rawParsed) {
+      const base = cloneDefaultData();
+      const merged = { ...base, ...(rawParsed || {}) };
+
+      merged.theme = merged.theme === "dark" ? "dark" : "light";
+
+      const rawAccounts = Array.isArray(merged.accounts) && merged.accounts.length
+        ? merged.accounts
+        : base.accounts;
+      merged.accounts = ensureUniqueIds(
+        rawAccounts.map(a => ({
+          id: a.id,
+          name: clampStr(a.name || "Compte", 120) || "Compte",
+          initialBalance: Number(a.initialBalance || 0)
+        })),
+        "acc",
+        a => a.name
+      );
+
+      if (merged.selectedAccountId !== "ALL" && !merged.accounts.some(a => a.id === merged.selectedAccountId)) {
+        merged.selectedAccountId = "ALL";
+      }
+
+      const pmts = Array.isArray(merged.paymentMethods) && merged.paymentMethods.length
+        ? merged.paymentMethods.map(m => clampStr(m, 80)).filter(Boolean)
+        : [...base.paymentMethods];
+      if (!pmts.includes("Prélèvement") && pmts.length < 30) {
+        pmts.push("Prélèvement");
+      }
+      merged.paymentMethods = pmts.slice(0, 30);
+
+      const rawCats = Array.isArray(merged.categories) && merged.categories.length
+        ? merged.categories
+        : base.categories;
+      merged.categories = ensureUniqueIds(
+        rawCats.map(c => ({
+          id: c.id,
+          name: clampStr(c.name || "Catégorie", 100) || "Catégorie",
+          budget: Math.max(0, Number(c.budget || 0)),
+          subcategories: Array.isArray(c.subcategories)
+            ? c.subcategories.map(s => clampStr(s, 100)).filter(Boolean).slice(0, 50)
+            : []
+        })),
+        "cat",
+        c => c.name
+      );
+
+      const rawPayees = Array.isArray(merged.payees) ? merged.payees : [];
+      merged.payees = ensureUniqueIds(
+        rawPayees.map(p => ({
+          id: p.id,
+          name: clampStr(p.name || "Tiers", 120) || "Tiers",
+          defaultCategory: clampStr(p.defaultCategory || "", 100)
+        })),
+        "payee",
+        p => p.name
+      );
+
+      const validAccIds = new Set(merged.accounts.map(a => a.id));
+      const fallbackAccId = merged.accounts[0].id;
+
+      const rawTx = Array.isArray(merged.transactions) ? merged.transactions : [];
+      merged.transactions = ensureUniqueIds(
+        rawTx
+          .filter(t => Number(t.amount) > 0)
+          .map(t => ({
+            id: t.id,
+            date: normalizeDateOrEmpty(t.date) || getTodayLocalISO(),
+            accountId: validAccIds.has(t.accountId) ? t.accountId : fallbackAccId,
+            type: t.type === "income" ? "income" : "expense",
+            amount: Number(Number(t.amount).toFixed(2)),
+            paymentMethod: clampStr(t.paymentMethod || merged.paymentMethods[0] || "Carte bancaire", 80) || "Carte bancaire",
+            checkNumber: clampStr(t.checkNumber || "", 40),
+            category: clampStr(t.category || merged.categories[0].name, 100) || "Autre",
+            subcategory: clampStr(t.subcategory || "", 100),
+            payee: clampStr(t.payee || "", 120),
+            label: clampStr(t.label || "Opération", 200) || "Opération",
+            cleared: Boolean(t.cleared)
+          })),
+        "tx",
+        (_, i) => String(i + 1)
+      ).sort((a, b) => b.date.localeCompare(a.date));
+
+      const rawSch = Array.isArray(merged.schedules) ? merged.schedules : [];
+      merged.schedules = ensureUniqueIds(
+        rawSch
+          .filter(s => Number(s.amount) > 0)
+          .map(s => {
+            const isUnlim = s.unlimited !== undefined ? Boolean(s.unlimited) : !s.endDate;
+            return {
+              id: s.id,
+              day: Math.min(28, Math.max(1, Math.round(Number(s.day || 1)))),
+              accountId: validAccIds.has(s.accountId) ? s.accountId : fallbackAccId,
+              type: s.type === "income" ? "income" : "expense",
+              amount: Number(Number(s.amount).toFixed(2)),
+              paymentMethod: clampStr(s.paymentMethod || (merged.paymentMethods.includes("Prélèvement") ? "Prélèvement" : merged.paymentMethods[0]), 80) || "Prélèvement",
+              checkNumber: clampStr(s.checkNumber || "", 40),
+              category: clampStr(s.category || merged.categories[0].name, 100) || "Autre",
+              subcategory: clampStr(s.subcategory || "", 100),
+              payee: clampStr(s.payee || "", 120),
+              label: clampStr(s.label || "Échéance", 200) || "Échéance",
+              startDate: normalizeDateOrEmpty(s.startDate),
+              unlimited: isUnlim,
+              endDate: isUnlim ? "" : normalizeDateOrEmpty(s.endDate)
+            };
+          }),
+        "sch",
+        (_, i) => String(i + 1)
+      );
+
+      return merged;
+    }
 
     function loadLocalData() {
       try {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return cloneDefaultData();
-        const parsed = JSON.parse(raw);
-        const merged = { ...cloneDefaultData(), ...parsed };
-
-        merged.accounts = Array.isArray(merged.accounts) && merged.accounts.length
-          ? merged.accounts
-          : cloneDefaultData().accounts;
-
-        merged.paymentMethods = Array.isArray(merged.paymentMethods) && merged.paymentMethods.length
-          ? merged.paymentMethods
-          : cloneDefaultData().paymentMethods;
-        if (!merged.paymentMethods.includes("Prélèvement")) {
-          merged.paymentMethods.push("Prélèvement");
+        if (!raw) {
+          const def = cloneDefaultData();
+          if (savedTheme === "dark" || savedTheme === "light") def.theme = savedTheme;
+          return def;
         }
-
-        merged.categories = (merged.categories || DEFAULT_DATA.categories).map(c => ({
-          name: c.name,
-          budget: Number(c.budget || 0),
-          subcategories: Array.isArray(c.subcategories) ? c.subcategories : []
-        }));
-
-        merged.payees = Array.isArray(merged.payees) ? merged.payees : [];
-
-        merged.transactions = (merged.transactions || []).map(t => ({
-          paymentMethod: t.paymentMethod || "Carte bancaire",
-          checkNumber: t.checkNumber || "",
-          subcategory: t.subcategory || "",
-          payee: t.payee || "",
-          ...t
-        }));
-
-        merged.schedules = (merged.schedules || []).map(s => ({
-          startDate: s.startDate || "",
-          unlimited: s.unlimited !== undefined ? Boolean(s.unlimited) : !s.endDate,
-          endDate: s.endDate || "",
-          paymentMethod: s.paymentMethod || "Prélèvement",
-          checkNumber: s.checkNumber || "",
-          subcategory: s.subcategory || "",
-          payee: s.payee || "",
-          ...s
-        }));
-
-        return merged;
+        const parsed = JSON.parse(raw);
+        const normalized = normalizeStateShape(parsed);
+        if (savedTheme === "dark" || savedTheme === "light") {
+          normalized.theme = savedTheme;
+        }
+        return normalized;
       } catch {
         return cloneDefaultData();
       }
     }
 
-    function saveLocalData(touchTimestamp = true) {
+    let state = loadLocalData();
+    let selectedTxIds = new Set();
+
+    function applyThemeUI(theme) {
+      const resolved = theme === "dark" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", resolved);
+      localStorage.setItem(THEME_STORAGE_KEY, resolved);
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute("content", resolved === "dark" ? "#0f172a" : "#1e3a8a");
+
+      const headerBtn = document.getElementById("themeToggleBtn");
+      if (headerBtn) {
+        headerBtn.textContent = resolved === "dark" ? "Thème clair" : "Thème sombre";
+      }
+      const lightBtn = document.getElementById("themeBtnLight");
+      const darkBtn = document.getElementById("themeBtnDark");
+      if (lightBtn && darkBtn) {
+        lightBtn.className = resolved === "light" ? "btn-dark" : "btn-outline";
+        darkBtn.className = resolved === "dark" ? "btn-dark" : "btn-outline";
+      }
+    }
+
+    applyThemeUI(state.theme);
+
+    function saveLocalCache(touchTimestamp = true) {
       if (touchTimestamp) state.updatedAt = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       renderAll();
+    }
+
+    function setSyncStatus(msg) {
+      const el = document.getElementById("syncStatus");
+      if (el) el.textContent = msg;
+    }
+
+    function handleFirestoreError(error, operationType, path) {
+      const errInfo = {
+        error: error instanceof Error ? error.message : String(error),
+        authInfo: {
+          userId: auth?.currentUser?.uid,
+          email: auth?.currentUser?.email,
+          emailVerified: auth?.currentUser?.emailVerified,
+          isAnonymous: auth?.currentUser?.isAnonymous,
+          tenantId: auth?.currentUser?.tenantId,
+          providerInfo: auth?.currentUser?.providerData?.map(provider => ({
+            providerId: provider.providerId,
+            email: provider.email
+          })) || []
+        },
+        operationType,
+        path
+      };
+      console.error("Firestore Error:", JSON.stringify(errInfo));
+      setSyncStatus("Erreur de synchro Cloud — vérifiez votre connexion");
+      throw new Error(JSON.stringify(errInfo));
+    }
+
+    async function testConnection() {
+      if (!db) return;
+      try {
+        await getDocFromServer(doc(db, "test", "connection"));
+      } catch (error) {
+        if (error instanceof Error && error.message.includes("the client is offline")) {
+          console.error("Please check your Firebase configuration.");
+          setSyncStatus("Hors ligne — synchronisation en attente");
+        }
+      }
+    }
+
+    function userRef(uid) {
+      return doc(db, "users", uid);
+    }
+
+    function accountRef(uid, id) {
+      return doc(db, "users", uid, "accounts", id);
+    }
+
+    function txRef(uid, id) {
+      return doc(db, "users", uid, "transactions", id);
+    }
+
+    function catRef(uid, id) {
+      return doc(db, "users", uid, "categories", id);
+    }
+
+    function payeeRef(uid, id) {
+      return doc(db, "users", uid, "payees", id);
+    }
+
+    function scheduleRef(uid, id) {
+      return doc(db, "users", uid, "schedules", id);
+    }
+
+    function buildUserSettingsPayload(uid) {
+      return {
+        uid,
+        theme: state.theme === "dark" ? "dark" : "light",
+        selectedAccountId: isValidDocId(state.selectedAccountId) ? state.selectedAccountId : "ALL",
+        paymentMethods: state.paymentMethods.slice(0, 30),
+        updatedAt: serverTimestamp()
+      };
+    }
+
+    function buildAccountPayload(uid, acc, includeCreatedAt = false) {
+      const initBal = Number(acc.initialBalance);
+      const payload = {
+        id: acc.id,
+        ownerId: uid,
+        name: clampStr(acc.name, 120) || "Compte",
+        initialBalance: Number.isFinite(initBal) ? initBal : 0,
+        updatedAt: serverTimestamp()
+      };
+      if (includeCreatedAt) payload.createdAt = serverTimestamp();
+      return payload;
+    }
+
+    function buildTxPayload(uid, tx, includeCreatedAt = false) {
+      const rawAmt = Number(tx.amount);
+      const safeAmt = Number.isFinite(rawAmt) ? Math.max(0.01, Number(rawAmt.toFixed(2))) : 0.01;
+      const payload = {
+        id: tx.id,
+        ownerId: uid,
+        date: normalizeDateOrEmpty(tx.date) || getTodayLocalISO(),
+        accountId: tx.accountId,
+        type: tx.type === "income" ? "income" : "expense",
+        amount: safeAmt,
+        paymentMethod: clampStr(tx.paymentMethod || "Carte bancaire", 80) || "Carte bancaire",
+        checkNumber: clampStr(tx.checkNumber || "", 40),
+        category: clampStr(tx.category || "Autre", 100) || "Autre",
+        subcategory: clampStr(tx.subcategory || "", 100),
+        payee: clampStr(tx.payee || "", 120),
+        label: clampStr(tx.label || "Opération", 200) || "Opération",
+        cleared: Boolean(tx.cleared),
+        updatedAt: serverTimestamp()
+      };
+      if (includeCreatedAt) payload.createdAt = serverTimestamp();
+      return payload;
+    }
+
+    function buildCatPayload(uid, cat, includeCreatedAt = false) {
+      const rawBudget = Number(cat.budget);
+      const payload = {
+        id: cat.id,
+        ownerId: uid,
+        name: clampStr(cat.name, 100) || "Catégorie",
+        budget: Number.isFinite(rawBudget) ? Math.max(0, rawBudget) : 0,
+        subcategories: (Array.isArray(cat.subcategories) ? cat.subcategories : [])
+          .map(s => clampStr(s, 100))
+          .filter(Boolean)
+          .slice(0, 50),
+        updatedAt: serverTimestamp()
+      };
+      if (includeCreatedAt) payload.createdAt = serverTimestamp();
+      return payload;
+    }
+
+    function buildPayeePayload(uid, payee, includeCreatedAt = false) {
+      const payload = {
+        id: payee.id,
+        ownerId: uid,
+        name: clampStr(payee.name, 120) || "Tiers",
+        defaultCategory: clampStr(payee.defaultCategory || "", 100),
+        updatedAt: serverTimestamp()
+      };
+      if (includeCreatedAt) payload.createdAt = serverTimestamp();
+      return payload;
+    }
+
+    function buildSchedulePayload(uid, sch, includeCreatedAt = false) {
+      const isUnlim = sch.unlimited !== undefined ? Boolean(sch.unlimited) : !sch.endDate;
+      const rawAmt = Number(sch.amount);
+      const safeAmt = Number.isFinite(rawAmt) ? Math.max(0.01, Number(rawAmt.toFixed(2))) : 0.01;
+      const payload = {
+        id: sch.id,
+        ownerId: uid,
+        day: Math.min(28, Math.max(1, Math.round(Number(sch.day || 1)))),
+        accountId: sch.accountId,
+        type: sch.type === "income" ? "income" : "expense",
+        amount: safeAmt,
+        paymentMethod: clampStr(sch.paymentMethod || "Prélèvement", 80) || "Prélèvement",
+        checkNumber: clampStr(sch.checkNumber || "", 40),
+        category: clampStr(sch.category || "Autre", 100) || "Autre",
+        subcategory: clampStr(sch.subcategory || "", 100),
+        payee: clampStr(sch.payee || "", 120),
+        label: clampStr(sch.label || "Échéance", 200) || "Échéance",
+        startDate: normalizeDateOrEmpty(sch.startDate),
+        unlimited: isUnlim,
+        endDate: isUnlim ? "" : normalizeDateOrEmpty(sch.endDate),
+        updatedAt: serverTimestamp()
+      };
+      if (includeCreatedAt) payload.createdAt = serverTimestamp();
+      return payload;
+    }
+
+    async function commitBatchOps(ops, pathLabel) {
+      if (!db || !ops.length) return;
+      const CHUNK_SIZE = 400;
+      try {
+        for (let i = 0; i < ops.length; i += CHUNK_SIZE) {
+          const batch = writeBatch(db);
+          const slice = ops.slice(i, i + CHUNK_SIZE);
+          for (const op of slice) {
+            if (op.kind === "set") batch.set(op.ref, op.data);
+            else if (op.kind === "update") batch.update(op.ref, op.data);
+            else if (op.kind === "delete") batch.delete(op.ref);
+          }
+          await batch.commit();
+        }
+      } catch (error) {
+        handleFirestoreError(error, OperationType.WRITE, pathLabel);
+      }
+    }
+
+    async function cloudExec(opType, path, fn) {
+      if (!db || !currentUser) return;
+      setSyncStatus(`Synchronisation... (${currentUser.email || ""})`);
+      try {
+        await fn();
+        setSyncStatus(`Synchro auto active • ${currentUser.email || ""}`);
+      } catch (error) {
+        handleFirestoreError(error, opType, path);
+      }
+    }
+
+    async function pushFullStateToCloud(uid, userDocExists, sourceState = state) {
+      const ops = [];
+      if (userDocExists) {
+        ops.push({
+          kind: "update",
+          ref: userRef(uid),
+          data: {
+            theme: sourceState.theme === "dark" ? "dark" : "light",
+            selectedAccountId: isValidDocId(sourceState.selectedAccountId) ? sourceState.selectedAccountId : "ALL",
+            paymentMethods: sourceState.paymentMethods.slice(0, 30),
+            updatedAt: serverTimestamp()
+          }
+        });
+      } else {
+        ops.push({
+          kind: "set",
+          ref: userRef(uid),
+          data: {
+            uid,
+            theme: sourceState.theme === "dark" ? "dark" : "light",
+            selectedAccountId: isValidDocId(sourceState.selectedAccountId) ? sourceState.selectedAccountId : "ALL",
+            paymentMethods: sourceState.paymentMethods.slice(0, 30),
+            updatedAt: serverTimestamp()
+          }
+        });
+      }
+
+      for (const acc of sourceState.accounts) {
+        ops.push({ kind: "set", ref: accountRef(uid, acc.id), data: buildAccountPayload(uid, acc, true) });
+      }
+      for (const cat of sourceState.categories) {
+        ops.push({ kind: "set", ref: catRef(uid, cat.id), data: buildCatPayload(uid, cat, true) });
+      }
+      for (const payee of sourceState.payees) {
+        ops.push({ kind: "set", ref: payeeRef(uid, payee.id), data: buildPayeePayload(uid, payee, true) });
+      }
+      for (const sch of sourceState.schedules) {
+        ops.push({ kind: "set", ref: scheduleRef(uid, sch.id), data: buildSchedulePayload(uid, sch, true) });
+      }
+      for (const tx of sourceState.transactions) {
+        ops.push({ kind: "set", ref: txRef(uid, tx.id), data: buildTxPayload(uid, tx, true) });
+      }
+
+      await commitBatchOps(ops, `users/${uid}`);
+    }
+
+    async function clearCloudSubcollections(uid) {
+      const subNames = ["transactions", "schedules", "payees", "categories", "accounts"];
+      const deleteOps = [];
+      for (const sub of subNames) {
+        const path = `users/${uid}/${sub}`;
+        try {
+          const q = query(collection(db, "users", uid, sub), where("ownerId", "==", uid));
+          const snap = await getDocs(q);
+          snap.forEach(d => deleteOps.push({ kind: "delete", ref: d.ref }));
+        } catch (error) {
+          handleFirestoreError(error, OperationType.LIST, path);
+        }
+      }
+      if (deleteOps.length) {
+        await commitBatchOps(deleteOps, `users/${uid}`);
+      }
+    }
+
+    function unsubscribeCloudListeners() {
+      for (const unsub of cloudListeners) {
+        try { unsub(); } catch {}
+      }
+      cloudListeners = [];
+      cloudInitialHydrationDone = false;
+    }
+
+    function updateAuthUI() {
+      const signedIn = Boolean(currentUser);
+      const banner = document.getElementById("authBanner");
+      const headerAuthBtn = document.getElementById("headerAuthBtn");
+      const settingsSignInBtn = document.getElementById("settingsSignInBtn");
+      const settingsSignOutBtn = document.getElementById("settingsSignOutBtn");
+      const details = document.getElementById("cloudAccountDetails");
+
+      if (banner) banner.classList.toggle("hidden", signedIn);
+      if (headerAuthBtn) {
+        headerAuthBtn.textContent = signedIn ? "Déconnexion" : "Connexion Cloud";
+        headerAuthBtn.className = signedIn ? "btn-secondary" : "btn-sync";
+      }
+      if (settingsSignInBtn) settingsSignInBtn.classList.toggle("hidden", signedIn);
+      if (settingsSignOutBtn) settingsSignOutBtn.classList.toggle("hidden", !signedIn);
+      if (details) {
+        details.textContent = signedIn
+          ? `Connecté avec ${currentUser.email || "votre compte Google"}. Toutes vos modifications sont synchronisées automatiquement en temps réel entre votre PC et votre téléphone.`
+          : "Connectez-vous avec votre compte Google sur votre PC et votre téléphone. Toute opération ajoutée, modifiée ou pointée est automatiquement synchronisée en temps réel sans manipulation de fichiers.";
+      }
+      setSyncStatus(
+        signedIn
+          ? `Synchro auto active • ${currentUser.email || ""}`
+          : "Mode local • Connexion Cloud requise pour PC & Téléphone"
+      );
+    }
+
+    function attachCloudListeners(uid) {
+      unsubscribeCloudListeners();
+      const loadedFlags = {
+        user: false,
+        accounts: false,
+        categories: false,
+        payees: false,
+        schedules: false,
+        transactions: false
+      };
+
+      const maybeFinishHydration = () => {
+        if (
+          !cloudInitialHydrationDone &&
+          loadedFlags.user &&
+          loadedFlags.accounts &&
+          loadedFlags.categories &&
+          loadedFlags.payees &&
+          loadedFlags.schedules &&
+          loadedFlags.transactions
+        ) {
+          cloudInitialHydrationDone = true;
+          const currentMonth = getTodayLocalISO().slice(0, 7);
+          const sessionKey = `${uid}:${currentMonth}`;
+          if (autoInjectedForSessionKey !== sessionKey) {
+            autoInjectedForSessionKey = sessionKey;
+            injectSchedulesForMonth(currentMonth);
+          }
+        }
+      };
+
+      cloudListeners.push(
+        onSnapshot(
+          userRef(uid),
+          snap => {
+            if (snap.exists()) {
+              const data = snap.data();
+              if (data.theme === "dark" || data.theme === "light") {
+                state.theme = data.theme;
+                applyThemeUI(state.theme);
+              }
+              if (typeof data.selectedAccountId === "string") {
+                state.selectedAccountId = data.selectedAccountId;
+              }
+              if (Array.isArray(data.paymentMethods) && data.paymentMethods.length) {
+                state.paymentMethods = data.paymentMethods;
+              }
+              saveLocalCache(false);
+            }
+            loadedFlags.user = true;
+            maybeFinishHydration();
+          },
+          error => handleFirestoreError(error, OperationType.GET, `users/${uid}`)
+        )
+      );
+
+      cloudListeners.push(
+        onSnapshot(
+          query(collection(db, "users", uid, "accounts"), where("ownerId", "==", uid)),
+          snap => {
+            const list = [];
+            snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+            list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            if (list.length) {
+              state.accounts = list.map(a => ({
+                id: a.id,
+                name: a.name,
+                initialBalance: Number(a.initialBalance || 0)
+              }));
+            }
+            loadedFlags.accounts = true;
+            saveLocalCache(false);
+            maybeFinishHydration();
+          },
+          error => handleFirestoreError(error, OperationType.LIST, `users/${uid}/accounts`)
+        )
+      );
+
+      cloudListeners.push(
+        onSnapshot(
+          query(collection(db, "users", uid, "categories"), where("ownerId", "==", uid)),
+          snap => {
+            const list = [];
+            snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+            list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            if (list.length) {
+              state.categories = list.map(c => ({
+                id: c.id,
+                name: c.name,
+                budget: Number(c.budget || 0),
+                subcategories: Array.isArray(c.subcategories) ? c.subcategories : []
+              }));
+            }
+            loadedFlags.categories = true;
+            saveLocalCache(false);
+            maybeFinishHydration();
+          },
+          error => handleFirestoreError(error, OperationType.LIST, `users/${uid}/categories`)
+        )
+      );
+
+      cloudListeners.push(
+        onSnapshot(
+          query(collection(db, "users", uid, "payees"), where("ownerId", "==", uid)),
+          snap => {
+            const list = [];
+            snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+            list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            state.payees = list.map(p => ({
+              id: p.id,
+              name: p.name,
+              defaultCategory: p.defaultCategory || ""
+            }));
+            loadedFlags.payees = true;
+            saveLocalCache(false);
+            maybeFinishHydration();
+          },
+          error => handleFirestoreError(error, OperationType.LIST, `users/${uid}/payees`)
+        )
+      );
+
+      cloudListeners.push(
+        onSnapshot(
+          query(collection(db, "users", uid, "schedules"), where("ownerId", "==", uid)),
+          snap => {
+            const list = [];
+            snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+            list.sort((a, b) => Number(a.day || 0) - Number(b.day || 0));
+            state.schedules = list.map(s => ({
+              id: s.id,
+              day: Number(s.day || 1),
+              accountId: s.accountId,
+              type: s.type,
+              amount: Number(s.amount || 0),
+              paymentMethod: s.paymentMethod || "Prélèvement",
+              checkNumber: s.checkNumber || "",
+              category: s.category,
+              subcategory: s.subcategory || "",
+              payee: s.payee || "",
+              label: s.label,
+              startDate: s.startDate || "",
+              unlimited: s.unlimited !== undefined ? Boolean(s.unlimited) : !s.endDate,
+              endDate: s.endDate || ""
+            }));
+            loadedFlags.schedules = true;
+            saveLocalCache(false);
+            maybeFinishHydration();
+          },
+          error => handleFirestoreError(error, OperationType.LIST, `users/${uid}/schedules`)
+        )
+      );
+
+      cloudListeners.push(
+        onSnapshot(
+          query(collection(db, "users", uid, "transactions"), where("ownerId", "==", uid)),
+          snap => {
+            const list = [];
+            snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+            list.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+            state.transactions = list.map(t => ({
+              id: t.id,
+              date: t.date,
+              accountId: t.accountId,
+              type: t.type,
+              amount: Number(t.amount || 0),
+              paymentMethod: t.paymentMethod || "Carte bancaire",
+              checkNumber: t.checkNumber || "",
+              category: t.category,
+              subcategory: t.subcategory || "",
+              payee: t.payee || "",
+              label: t.label,
+              cleared: Boolean(t.cleared)
+            }));
+            loadedFlags.transactions = true;
+            saveLocalCache(false);
+            maybeFinishHydration();
+          },
+          error => handleFirestoreError(error, OperationType.LIST, `users/${uid}/transactions`)
+        )
+      );
+    }
+
+    async function initFirebase() {
+      try {
+        const res = await fetch("./firebase-applet-config.json");
+        if (!res.ok) throw new Error("Config Firebase introuvable");
+        const firebaseConfig = await res.json();
+        firebaseApp = initializeApp(firebaseConfig);
+        db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+        auth = getAuth(firebaseApp);
+
+        await testConnection();
+
+        onAuthStateChanged(auth, async (user) => {
+          currentUser = user;
+          updateAuthUI();
+
+          if (!user) {
+            unsubscribeCloudListeners();
+            return;
+          }
+
+          setSyncStatus(`Chargement du cloud... (${user.email || ""})`);
+          try {
+            const snap = await getDoc(userRef(user.uid));
+            if (!snap.exists()) {
+              await pushFullStateToCloud(user.uid, false);
+            }
+            attachCloudListeners(user.uid);
+            setSyncStatus(`Synchro auto active • ${user.email || ""}`);
+          } catch (error) {
+            handleFirestoreError(error, OperationType.GET, `users/${user.uid}`);
+          }
+        });
+      } catch (err) {
+        console.error("Firebase init error:", err);
+        setSyncStatus("Mode local uniquement (erreur init Cloud)");
+      }
+    }
+
+    async function signInWithGoogle() {
+      if (!auth) {
+        setSyncStatus("Initialisation Cloud en cours...");
+        return;
+      }
+      try {
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: "select_account" });
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        console.error("Google sign-in error:", err);
+        if (err?.code === "auth/popup-blocked") {
+          alert("La fenêtre de connexion Google a été bloquée par votre navigateur. Autorisez les pop-ups pour ce site puis réessayez.");
+        } else if (err?.code !== "auth/popup-closed-by-user") {
+          setSyncStatus("Connexion Google annulée ou impossible");
+        }
+      }
+    }
+
+    async function signOutCloud() {
+      if (!auth) return;
+      try {
+        await signOut(auth);
+      } catch (err) {
+        console.error("Sign out error:", err);
+      }
+    }
+
+    function handleAuthClick() {
+      if (currentUser) signOutCloud();
+      else signInWithGoogle();
+    }
+
+    function setTheme(theme) {
+      const next = theme === "dark" ? "dark" : "light";
+      state.theme = next;
+      applyThemeUI(next);
+      saveLocalCache(true);
+      renderBalanceChart(document.getElementById("filterMonth").value);
+      if (currentUser && db) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}`, () =>
+          updateDoc(userRef(currentUser.uid), { theme: next, updatedAt: serverTimestamp() })
+        );
+      }
+    }
+
+    function toggleTheme() {
+      setTheme(state.theme === "dark" ? "light" : "dark");
     }
 
     function formatEur(val) {
@@ -1786,7 +2641,7 @@
       if (!actions || !toggleBtn) return;
       const isOpen = actions.classList.toggle("open");
       toggleBtn.setAttribute("aria-expanded", String(isOpen));
-      toggleBtn.textContent = isOpen ? "Actions ▴" : "Actions ▾";
+      toggleBtn.textContent = isOpen ? "Menu ▴" : "Menu ▾";
     }
 
     function switchTab(tabName) {
@@ -1825,12 +2680,26 @@
     }
 
     function addPaymentMethodToState(rawName) {
-      const clean = (rawName || "").trim();
+      const clean = clampStr(rawName, 80);
       if (!clean) return null;
       const existing = state.paymentMethods.find(m => m.toLowerCase() === clean.toLowerCase());
       if (existing) return existing;
+      if (state.paymentMethods.length >= 30) {
+        alert("Limite de 30 moyens de paiement atteinte.");
+        return null;
+      }
       state.paymentMethods.push(clean);
       return clean;
+    }
+
+    function syncPaymentMethodsToCloud() {
+      if (!currentUser || !db) return;
+      cloudExec(OperationType.UPDATE, `users/${currentUser.uid}`, () =>
+        updateDoc(userRef(currentUser.uid), {
+          paymentMethods: state.paymentMethods.slice(0, 30),
+          updatedAt: serverTimestamp()
+        })
+      );
     }
 
     function quickAddPaymentMethod(targetSelectId) {
@@ -1838,7 +2707,8 @@
       if (!name || !name.trim()) return;
       const added = addPaymentMethodToState(name);
       if (!added) return;
-      saveLocalData();
+      saveLocalCache();
+      syncPaymentMethodsToCloud();
       const sel = document.getElementById(targetSelectId);
       if (sel) {
         sel.value = added;
@@ -1849,15 +2719,16 @@
     function addPaymentMethodForm(e) {
       e.preventDefault();
       const input = document.getElementById("newPaymentMethodName");
-      const clean = input.value.trim();
+      const clean = clampStr(input.value, 80);
       if (!clean) return;
       if (state.paymentMethods.some(m => m.toLowerCase() === clean.toLowerCase())) {
         alert("Ce moyen de paiement existe déjà.");
         return;
       }
-      addPaymentMethodToState(clean);
+      if (!addPaymentMethodToState(clean)) return;
       input.value = "";
-      saveLocalData();
+      saveLocalCache();
+      syncPaymentMethodsToCloud();
     }
 
     function deletePaymentMethod(methodName) {
@@ -1867,7 +2738,8 @@
       }
       if (!confirm(`Supprimer le moyen de paiement « ${methodName} » ?`)) return;
       state.paymentMethods = state.paymentMethods.filter(m => m !== methodName);
-      saveLocalData();
+      saveLocalCache();
+      syncPaymentMethodsToCloud();
     }
 
     function computeAccountBalances(accountId) {
@@ -1900,14 +2772,33 @@
       if (!acc) return;
       if (!confirm(`Supprimer le compte « ${acc.name} » ainsi que ses opérations associées ?`)) return;
 
+      const removedTxIds = state.transactions.filter(t => t.accountId === accId).map(t => t.id);
+      const removedSchIds = state.schedules.filter(s => s.accountId === accId).map(s => s.id);
+      const resetSelected = state.selectedAccountId === accId;
+
       state.accounts = state.accounts.filter(a => a.id !== accId);
       state.transactions = state.transactions.filter(t => t.accountId !== accId);
       state.schedules = state.schedules.filter(s => s.accountId !== accId);
+      if (resetSelected) state.selectedAccountId = "ALL";
 
-      if (state.selectedAccountId === accId) {
-        state.selectedAccountId = "ALL";
+      saveLocalCache();
+
+      if (currentUser && db) {
+        const uid = currentUser.uid;
+        const ops = [
+          ...removedTxIds.map(id => ({ kind: "delete", ref: txRef(uid, id) })),
+          ...removedSchIds.map(id => ({ kind: "delete", ref: scheduleRef(uid, id) })),
+          { kind: "delete", ref: accountRef(uid, accId) }
+        ];
+        if (resetSelected) {
+          ops.push({
+            kind: "update",
+            ref: userRef(uid),
+            data: { selectedAccountId: "ALL", updatedAt: serverTimestamp() }
+          });
+        }
+        commitBatchOps(ops, `users/${uid}/accounts/${accId}`);
       }
-      saveLocalData();
     }
 
     // --- SELECTION MULTIPLE & ACTIONS PAR LOT ---
@@ -1936,18 +2827,36 @@
       const count = selectedTxIds.size;
       if (!count) return;
       if (!confirm(`Supprimer définitivement les ${count} opération(s) sélectionnée(s) ?`)) return;
+      const ids = [...selectedTxIds];
       state.transactions = state.transactions.filter(t => !selectedTxIds.has(t.id));
       selectedTxIds.clear();
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        const uid = currentUser.uid;
+        const ops = ids.map(id => ({ kind: "delete", ref: txRef(uid, id) }));
+        commitBatchOps(ops, `users/${uid}/transactions`);
+      }
     }
 
     function bulkSetCleared(clearedVal) {
       if (!selectedTxIds.size) return;
+      const ids = [...selectedTxIds];
       for (const tx of state.transactions) {
         if (selectedTxIds.has(tx.id)) tx.cleared = clearedVal;
       }
       selectedTxIds.clear();
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        const uid = currentUser.uid;
+        const ops = ids.map(id => ({
+          kind: "update",
+          ref: txRef(uid, id),
+          data: { cleared: Boolean(clearedVal), updatedAt: serverTimestamp() }
+        }));
+        commitBatchOps(ops, `users/${uid}/transactions`);
+      }
     }
 
     // --- GRAPHIQUE D'EVOLUTION DU SOLDE ---
@@ -1987,6 +2896,13 @@
         return;
       }
 
+      const styles = getComputedStyle(document.documentElement);
+      const colGrid = styles.getPropertyValue("--chart-grid").trim() || "#cbd5e1";
+      const colZero = styles.getPropertyValue("--chart-zero").trim() || "#94a3b8";
+      const colMuted = styles.getPropertyValue("--muted").trim() || "#64748b";
+      const colPos = styles.getPropertyValue("--chart-pos").trim() || "#4d7c0f";
+      const colNeg = styles.getPropertyValue("--chart-neg").trim() || "#dc2626";
+
       const isCompact = window.innerWidth <= 640;
       const w = isCompact ? 400 : 780;
       const h = isCompact ? 200 : 210;
@@ -1994,7 +2910,7 @@
       const padRight = isCompact ? 14 : 18;
       const padTop = 18;
       const padBottom = 28;
-      const labelFontSize = isCompact ? 11 : 11;
+      const labelFontSize = 11;
       const plotW = w - padLeft - padRight;
       const plotH = h - padTop - padBottom;
 
@@ -2033,11 +2949,11 @@
       }
 
       const segSvg = segments
-        .map(s => `<line x1="${s.x1.toFixed(1)}" y1="${s.y1.toFixed(1)}" x2="${s.x2.toFixed(1)}" y2="${s.y2.toFixed(1)}" stroke="${s.neg ? "#dc2626" : "#4d7c0f"}" stroke-width="2.5" stroke-linecap="round" />`)
+        .map(s => `<line x1="${s.x1.toFixed(1)}" y1="${s.y1.toFixed(1)}" x2="${s.x2.toFixed(1)}" y2="${s.y2.toFixed(1)}" stroke="${s.neg ? colNeg : colPos}" stroke-width="2.5" stroke-linecap="round" />`)
         .join("");
 
       const dotsSvg = points
-        .map((pt, idx) => `<circle cx="${xPos(idx).toFixed(1)}" cy="${yPos(pt.balance).toFixed(1)}" r="${isCompact ? 3.5 : 3}" fill="${pt.balance < 0 ? "#dc2626" : "#4d7c0f"}"><title>${pt.date} : ${formatEur(pt.balance)}</title></circle>`)
+        .map((pt, idx) => `<circle cx="${xPos(idx).toFixed(1)}" cy="${yPos(pt.balance).toFixed(1)}" r="${isCompact ? 3.5 : 3}" fill="${pt.balance < 0 ? colNeg : colPos}"><title>${pt.date} : ${formatEur(pt.balance)}</title></circle>`)
         .join("");
 
       const firstLabel = points[0].date;
@@ -2046,16 +2962,16 @@
 
       container.innerHTML = `
         <svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Évolution du solde">
-          <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + plotH}" stroke="#cbd5e1" stroke-width="1" />
-          <line x1="${padLeft}" y1="${zeroY.toFixed(1)}" x2="${w - padRight}" y2="${zeroY.toFixed(1)}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3" />
-          <text x="${padLeft - 8}" y="${(padTop + 4).toFixed(1)}" text-anchor="end" font-size="${labelFontSize}" fill="#64748b">${Math.round(maxVal)}</text>
-          <text x="${padLeft - 8}" y="${(zeroY + 4).toFixed(1)}" text-anchor="end" font-size="${labelFontSize}" fill="#64748b">0</text>
-          <text x="${padLeft - 8}" y="${(padTop + plotH).toFixed(1)}" text-anchor="end" font-size="${labelFontSize}" fill="#64748b">${Math.round(minVal)}</text>
+          <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + plotH}" stroke="${colGrid}" stroke-width="1" />
+          <line x1="${padLeft}" y1="${zeroY.toFixed(1)}" x2="${w - padRight}" y2="${zeroY.toFixed(1)}" stroke="${colZero}" stroke-width="1" stroke-dasharray="4 3" />
+          <text x="${padLeft - 8}" y="${(padTop + 4).toFixed(1)}" text-anchor="end" font-size="${labelFontSize}" fill="${colMuted}">${Math.round(maxVal)}</text>
+          <text x="${padLeft - 8}" y="${(zeroY + 4).toFixed(1)}" text-anchor="end" font-size="${labelFontSize}" fill="${colMuted}">0</text>
+          <text x="${padLeft - 8}" y="${(padTop + plotH).toFixed(1)}" text-anchor="end" font-size="${labelFontSize}" fill="${colMuted}">${Math.round(minVal)}</text>
           ${segSvg}
           ${dotsSvg}
-          <text x="${padLeft}" y="${h - 8}" font-size="${labelFontSize}" fill="#64748b">${firstLabel}</text>
-          ${isCompact ? "" : `<text x="${(padLeft + plotW / 2).toFixed(1)}" y="${h - 8}" text-anchor="middle" font-size="${labelFontSize}" fill="#64748b">${midLabel}</text>`}
-          <text x="${w - padRight}" y="${h - 8}" text-anchor="end" font-size="${labelFontSize}" fill="#64748b">${lastLabel}</text>
+          <text x="${padLeft}" y="${h - 8}" font-size="${labelFontSize}" fill="${colMuted}">${firstLabel}</text>
+          ${isCompact ? "" : `<text x="${(padLeft + plotW / 2).toFixed(1)}" y="${h - 8}" text-anchor="middle" font-size="${labelFontSize}" fill="${colMuted}">${midLabel}</text>`}
+          <text x="${w - padRight}" y="${h - 8}" text-anchor="end" font-size="${labelFontSize}" fill="${colMuted}">${lastLabel}</text>
         </svg>
       `;
     }
@@ -2094,14 +3010,24 @@
     function quickAddPayee(targetSelectId) {
       const name = prompt("Nom du nouveau Tiers (ex. Netflix, EDF, Boulangerie) :");
       if (!name || !name.trim()) return;
-      const clean = name.trim();
-      const exists = state.payees.some(p => p.name.toLowerCase() === clean.toLowerCase());
-      if (!exists) {
-        state.payees.push({ name: clean, defaultCategory: "" });
-        saveLocalData();
+      const clean = clampStr(name, 120);
+      const existing = state.payees.find(p => p.name.toLowerCase() === clean.toLowerCase());
+      if (!existing) {
+        const newPayee = {
+          id: makeSafeId("payee", `${clean}-${Date.now()}`),
+          name: clean,
+          defaultCategory: ""
+        };
+        state.payees.push(newPayee);
+        saveLocalCache();
+        if (currentUser && db) {
+          cloudExec(OperationType.CREATE, `users/${currentUser.uid}/payees/${newPayee.id}`, () =>
+            setDoc(payeeRef(currentUser.uid, newPayee.id), buildPayeePayload(currentUser.uid, newPayee, true))
+          );
+        }
       }
       const sel = document.getElementById(targetSelectId);
-      if (sel) sel.value = clean;
+      if (sel) sel.value = existing ? existing.name : clean;
     }
 
     function addAccountPrompt() {
@@ -2109,12 +3035,18 @@
       if (!name || !name.trim()) return;
       const initStr = prompt("Solde initial en euros :", "0");
       const initialBalance = parseFloat((initStr || "0").replace(",", ".")) || 0;
-      state.accounts.push({
-        id: "acc-" + Date.now(),
-        name: name.trim(),
+      const newAcc = {
+        id: makeSafeId("acc", `${name}-${Date.now()}`),
+        name: clampStr(name, 120),
         initialBalance
-      });
-      saveLocalData();
+      };
+      state.accounts.push(newAcc);
+      saveLocalCache();
+      if (currentUser && db) {
+        cloudExec(OperationType.CREATE, `users/${currentUser.uid}/accounts/${newAcc.id}`, () =>
+          setDoc(accountRef(currentUser.uid, newAcc.id), buildAccountPayload(currentUser.uid, newAcc, true))
+        );
+      }
     }
 
     function editAccountPrompt(accId, event) {
@@ -2126,9 +3058,18 @@
       const initStr = prompt("Solde initial en euros (avant opérations enregistrées) :", String(acc.initialBalance || 0));
       const initialBalance = parseFloat((initStr || "0").replace(",", "."));
       if (isNaN(initialBalance)) return;
-      acc.name = name.trim();
+      acc.name = clampStr(name, 120);
       acc.initialBalance = initialBalance;
-      saveLocalData();
+      saveLocalCache();
+      if (currentUser && db) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}/accounts/${accId}`, () =>
+          updateDoc(accountRef(currentUser.uid, accId), {
+            name: acc.name,
+            initialBalance: acc.initialBalance,
+            updatedAt: serverTimestamp()
+          })
+        );
+      }
     }
 
     function calibrateAccountPrompt(accId, event) {
@@ -2153,23 +3094,21 @@
       const targetCurrent = parseFloat(currentStr.replace(",", "."));
       if (isNaN(targetCurrent)) return;
 
-      // 1) Adjust initialBalance so cleared balance equals targetCleared
       const clearedDiff = targetCleared - curBal.cleared;
       acc.initialBalance = Number(((acc.initialBalance || 0) + clearedDiff).toFixed(2));
 
-      // 2) After adjusting initialBalance, current balance becomes curBal.current + clearedDiff.
-      // Any remaining difference is represented by an un-cleared adjustment transaction dated today.
       const projectedCurrent = Number((curBal.current + clearedDiff).toFixed(2));
       const adjDelta = Number((targetCurrent - projectedCurrent).toFixed(2));
 
+      let adjTx = null;
       if (Math.abs(adjDelta) >= 0.005) {
         const defaultCat = (state.categories[0] && state.categories[0].name) || "Alimentation";
-        state.transactions.unshift({
-          id: "tx-adj-" + Date.now(),
+        adjTx = {
+          id: makeSafeId("tx-adj", String(Date.now())),
           date: getTodayLocalISO(),
           accountId: accId,
           type: adjDelta >= 0 ? "income" : "expense",
-          amount: Math.abs(adjDelta),
+          amount: Number(Math.abs(adjDelta).toFixed(2)),
           paymentMethod: state.paymentMethods[0] || "Carte bancaire",
           checkNumber: "",
           category: defaultCat,
@@ -2177,16 +3116,32 @@
           payee: "",
           label: "Ajustement solde réel",
           cleared: false
-        });
+        };
+        state.transactions.unshift(adjTx);
       }
 
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        const uid = currentUser.uid;
+        const ops = [
+          {
+            kind: "update",
+            ref: accountRef(uid, accId),
+            data: { initialBalance: acc.initialBalance, updatedAt: serverTimestamp() }
+          }
+        ];
+        if (adjTx) {
+          ops.push({ kind: "set", ref: txRef(uid, adjTx.id), data: buildTxPayload(uid, adjTx, true) });
+        }
+        commitBatchOps(ops, `users/${uid}/accounts/${accId}`);
+      }
     }
 
     function addCategoryForm(e) {
       e.preventDefault();
-      const name = document.getElementById("newCatName").value.trim();
-      const budget = parseFloat(document.getElementById("newCatBudget").value) || 0;
+      const name = clampStr(document.getElementById("newCatName").value, 100);
+      const budget = Math.max(0, parseFloat(document.getElementById("newCatBudget").value) || 0);
       if (!name) return;
 
       const exists = state.categories.some(c => c.name.toLowerCase() === name.toLowerCase());
@@ -2195,16 +3150,28 @@
         return;
       }
 
-      state.categories.push({ name, budget, subcategories: [] });
+      const newCat = {
+        id: makeSafeId("cat", `${name}-${Date.now()}`),
+        name,
+        budget,
+        subcategories: []
+      };
+      state.categories.push(newCat);
       document.getElementById("newCatName").value = "";
       document.getElementById("newCatBudget").value = "0";
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.CREATE, `users/${currentUser.uid}/categories/${newCat.id}`, () =>
+          setDoc(catRef(currentUser.uid, newCat.id), buildCatPayload(currentUser.uid, newCat, true))
+        );
+      }
     }
 
     function addSubcategoryForm(e) {
       e.preventDefault();
       const parentName = document.getElementById("newSubCatParent").value;
-      const subName = document.getElementById("newSubCatName").value.trim();
+      const subName = clampStr(document.getElementById("newSubCatName").value, 100);
       if (!parentName || !subName) return;
 
       const cat = state.categories.find(c => c.name === parentName);
@@ -2216,17 +3183,39 @@
         alert("Cette sous-catégorie existe déjà dans cette catégorie.");
         return;
       }
+      if (cat.subcategories.length >= 50) {
+        alert("Limite de 50 sous-catégories atteinte.");
+        return;
+      }
 
       cat.subcategories.push(subName);
       document.getElementById("newSubCatName").value = "";
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db && cat.id) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}/categories/${cat.id}`, () =>
+          updateDoc(catRef(currentUser.uid, cat.id), {
+            subcategories: cat.subcategories.slice(0, 50),
+            updatedAt: serverTimestamp()
+          })
+        );
+      }
     }
 
     function deleteSubcategory(catName, subName) {
       const cat = state.categories.find(c => c.name === catName);
       if (!cat) return;
       cat.subcategories = (cat.subcategories || []).filter(s => s !== subName);
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db && cat.id) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}/categories/${cat.id}`, () =>
+          updateDoc(catRef(currentUser.uid, cat.id), {
+            subcategories: cat.subcategories.slice(0, 50),
+            updatedAt: serverTimestamp()
+          })
+        );
+      }
     }
 
     function openEditCatModal(catName) {
@@ -2246,8 +3235,8 @@
     function saveEditedCategory(e) {
       e.preventDefault();
       const oldName = document.getElementById("editCatOriginalName").value;
-      const newName = document.getElementById("editCatName").value.trim();
-      const newBudget = parseFloat(document.getElementById("editCatBudget").value) || 0;
+      const newName = clampStr(document.getElementById("editCatName").value, 100);
+      const newBudget = Math.max(0, parseFloat(document.getElementById("editCatBudget").value) || 0);
       if (!newName) return;
 
       const duplicate = state.categories.some(
@@ -2260,26 +3249,67 @@
 
       const idx = state.categories.findIndex(c => c.name === oldName);
       if (idx === -1) return;
+      const catObj = state.categories[idx];
       state.categories[idx] = {
-        ...state.categories[idx],
+        ...catObj,
         name: newName,
         budget: newBudget
       };
 
+      const affectedTxIds = [];
+      const affectedSchIds = [];
+      const affectedPayeeIds = [];
+
       if (oldName !== newName) {
         for (const tx of state.transactions) {
-          if (tx.category === oldName) tx.category = newName;
+          if (tx.category === oldName) {
+            tx.category = newName;
+            affectedTxIds.push(tx.id);
+          }
         }
         for (const sch of state.schedules) {
-          if (sch.category === oldName) sch.category = newName;
+          if (sch.category === oldName) {
+            sch.category = newName;
+            affectedSchIds.push(sch.id);
+          }
         }
         for (const p of state.payees) {
-          if (p.defaultCategory === oldName) p.defaultCategory = newName;
+          if (p.defaultCategory === oldName) {
+            p.defaultCategory = newName;
+            affectedPayeeIds.push(p.id);
+          }
         }
       }
 
       closeEditCatModal();
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db && catObj.id) {
+        const uid = currentUser.uid;
+        const ops = [
+          {
+            kind: "update",
+            ref: catRef(uid, catObj.id),
+            data: { name: newName, budget: newBudget, updatedAt: serverTimestamp() }
+          },
+          ...affectedTxIds.map(id => ({
+            kind: "update",
+            ref: txRef(uid, id),
+            data: { category: newName, updatedAt: serverTimestamp() }
+          })),
+          ...affectedSchIds.map(id => ({
+            kind: "update",
+            ref: scheduleRef(uid, id),
+            data: { category: newName, updatedAt: serverTimestamp() }
+          })),
+          ...affectedPayeeIds.map(id => ({
+            kind: "update",
+            ref: payeeRef(uid, id),
+            data: { defaultCategory: newName, updatedAt: serverTimestamp() }
+          }))
+        ];
+        commitBatchOps(ops, `users/${uid}/categories/${catObj.id}`);
+      }
     }
 
     function deleteCategory(catName) {
@@ -2288,14 +3318,21 @@
         return;
       }
       if (!confirm(`Supprimer la catégorie « ${catName} » ?`)) return;
+      const catObj = state.categories.find(c => c.name === catName);
       state.categories = state.categories.filter(c => c.name !== catName);
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db && catObj?.id) {
+        cloudExec(OperationType.DELETE, `users/${currentUser.uid}/categories/${catObj.id}`, () =>
+          deleteDoc(catRef(currentUser.uid, catObj.id))
+        );
+      }
     }
 
     function addPayeeForm(e) {
       e.preventDefault();
-      const name = document.getElementById("newPayeeName").value.trim();
-      const defaultCategory = document.getElementById("newPayeeDefaultCat").value || "";
+      const name = clampStr(document.getElementById("newPayeeName").value, 120);
+      const defaultCategory = clampStr(document.getElementById("newPayeeDefaultCat").value || "", 100);
       if (!name) return;
 
       const exists = state.payees.some(p => p.name.toLowerCase() === name.toLowerCase());
@@ -2304,10 +3341,21 @@
         return;
       }
 
-      state.payees.push({ name, defaultCategory });
+      const newPayee = {
+        id: makeSafeId("payee", `${name}-${Date.now()}`),
+        name,
+        defaultCategory
+      };
+      state.payees.push(newPayee);
       document.getElementById("newPayeeName").value = "";
       document.getElementById("newPayeeDefaultCat").value = "";
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.CREATE, `users/${currentUser.uid}/payees/${newPayee.id}`, () =>
+          setDoc(payeeRef(currentUser.uid, newPayee.id), buildPayeePayload(currentUser.uid, newPayee, true))
+        );
+      }
     }
 
     function openEditPayeeModal(payeeName) {
@@ -2331,8 +3379,8 @@
     function saveEditedPayee(e) {
       e.preventDefault();
       const oldName = document.getElementById("editPayeeOriginalName").value;
-      const newName = document.getElementById("editPayeeName").value.trim();
-      const defaultCategory = document.getElementById("editPayeeDefaultCat").value || "";
+      const newName = clampStr(document.getElementById("editPayeeName").value, 120);
+      const defaultCategory = clampStr(document.getElementById("editPayeeDefaultCat").value || "", 100);
       if (!newName) return;
 
       const duplicate = state.payees.some(
@@ -2345,25 +3393,64 @@
 
       const idx = state.payees.findIndex(p => p.name === oldName);
       if (idx === -1) return;
-      state.payees[idx] = { name: newName, defaultCategory };
+      const payeeObj = state.payees[idx];
+      state.payees[idx] = { ...payeeObj, name: newName, defaultCategory };
+
+      const affectedTxIds = [];
+      const affectedSchIds = [];
 
       if (oldName !== newName) {
         for (const tx of state.transactions) {
-          if (tx.payee === oldName) tx.payee = newName;
+          if (tx.payee === oldName) {
+            tx.payee = newName;
+            affectedTxIds.push(tx.id);
+          }
         }
         for (const sch of state.schedules) {
-          if (sch.payee === oldName) sch.payee = newName;
+          if (sch.payee === oldName) {
+            sch.payee = newName;
+            affectedSchIds.push(sch.id);
+          }
         }
       }
 
       closeEditPayeeModal();
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db && payeeObj.id) {
+        const uid = currentUser.uid;
+        const ops = [
+          {
+            kind: "update",
+            ref: payeeRef(uid, payeeObj.id),
+            data: { name: newName, defaultCategory, updatedAt: serverTimestamp() }
+          },
+          ...affectedTxIds.map(id => ({
+            kind: "update",
+            ref: txRef(uid, id),
+            data: { payee: newName, updatedAt: serverTimestamp() }
+          })),
+          ...affectedSchIds.map(id => ({
+            kind: "update",
+            ref: scheduleRef(uid, id),
+            data: { payee: newName, updatedAt: serverTimestamp() }
+          }))
+        ];
+        commitBatchOps(ops, `users/${uid}/payees/${payeeObj.id}`);
+      }
     }
 
     function deletePayee(payeeName) {
       if (!confirm(`Supprimer le Tiers « ${payeeName} » ?`)) return;
+      const payeeObj = state.payees.find(p => p.name === payeeName);
       state.payees = state.payees.filter(p => p.name !== payeeName);
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db && payeeObj?.id) {
+        cloudExec(OperationType.DELETE, `users/${currentUser.uid}/payees/${payeeObj.id}`, () =>
+          deleteDoc(payeeRef(currentUser.uid, payeeObj.id))
+        );
+      }
     }
 
     // --- IMPORT CSV / QIF / OFX ---
@@ -2527,7 +3614,7 @@
       const file = document.getElementById("stmtFileInput").files[0];
       if (!file) return;
       const accountId = document.getElementById("stmtAccount").value;
-      const category = document.getElementById("stmtCategory").value;
+      const category = clampStr(document.getElementById("stmtCategory").value, 100);
       const cleared = document.getElementById("stmtCleared").checked;
       const ext = (file.name.split(".").pop() || "").toLowerCase();
 
@@ -2544,71 +3631,93 @@
           return;
         }
 
-        let added = 0;
+        const newTxs = [];
         let skipped = 0;
         for (const item of parsed) {
+          const cleanLabel = clampStr(item.label, 200) || "Opération importée";
           const isDup = state.transactions.some(
             t =>
               t.accountId === accountId &&
               t.date === item.date &&
               t.type === item.type &&
               Number(t.amount).toFixed(2) === Number(item.amount).toFixed(2) &&
-              t.label.toLowerCase() === item.label.toLowerCase()
+              t.label.toLowerCase() === cleanLabel.toLowerCase()
           );
           if (isDup) {
             skipped++;
             continue;
           }
-          state.transactions.unshift({
-            id: "tx-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+          const tx = {
+            id: makeSafeId("tx", `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`),
             date: item.date,
             accountId,
             type: item.type,
-            amount: Number(item.amount),
+            amount: Math.max(0.01, Number(Number(item.amount).toFixed(2))),
             paymentMethod: state.paymentMethods[0] || "Carte bancaire",
             checkNumber: "",
             category,
             subcategory: "",
             payee: "",
-            label: item.label,
+            label: cleanLabel,
             cleared
-          });
-          added++;
+          };
+          state.transactions.unshift(tx);
+          newTxs.push(tx);
         }
 
+        state.transactions.sort((a, b) => b.date.localeCompare(a.date));
         closeStatementImportModal();
-        saveLocalData();
-        alert(`Import terminé : ${added} opération(s) ajoutée(s), ${skipped} doublon(s) ignoré(s).`);
+        saveLocalCache();
+
+        if (currentUser && db && newTxs.length) {
+          const uid = currentUser.uid;
+          const ops = newTxs.map(tx => ({ kind: "set", ref: txRef(uid, tx.id), data: buildTxPayload(uid, tx, true) }));
+          commitBatchOps(ops, `users/${uid}/transactions`);
+        }
+
+        alert(`Import terminé : ${newTxs.length} opération(s) ajoutée(s), ${skipped} doublon(s) ignoré(s).`);
       };
       reader.readAsText(file, "UTF-8");
     }
 
     function addTransaction(e) {
       e.preventDefault();
-      const paymentMethod = document.getElementById("txPaymentMethod").value || state.paymentMethods[0] || "Carte bancaire";
+      const paymentMethod = clampStr(document.getElementById("txPaymentMethod").value || state.paymentMethods[0] || "Carte bancaire", 80);
       const checkNumber = paymentMethod === "Chèque"
-        ? document.getElementById("txCheckNumber").value.trim()
+        ? clampStr(document.getElementById("txCheckNumber").value, 40)
         : "";
+      const amount = Math.max(0.01, parseFloat(document.getElementById("txAmount").value) || 0.01);
+      const label = clampStr(document.getElementById("txLabel").value, 200);
+      if (!label) return;
 
-      state.transactions.unshift({
-        id: "tx-" + Date.now(),
+      const newTx = {
+        id: makeSafeId("tx", `${Date.now()}-${Math.random().toString(36).slice(2, 5)}`),
         date: document.getElementById("txDate").value,
         accountId: document.getElementById("txAccount").value,
         type: document.getElementById("txType").value,
-        amount: parseFloat(document.getElementById("txAmount").value),
+        amount: Number(amount.toFixed(2)),
         paymentMethod,
         checkNumber,
-        category: document.getElementById("txCategory").value,
-        subcategory: document.getElementById("txSubcategory").value || "",
-        payee: document.getElementById("txPayee").value || "",
-        label: document.getElementById("txLabel").value.trim(),
+        category: clampStr(document.getElementById("txCategory").value, 100),
+        subcategory: clampStr(document.getElementById("txSubcategory").value || "", 100),
+        payee: clampStr(document.getElementById("txPayee").value || "", 120),
+        label,
         cleared: document.getElementById("txCleared").checked
-      });
+      };
+
+      state.transactions.unshift(newTx);
+      state.transactions.sort((a, b) => b.date.localeCompare(a.date));
       document.getElementById("txAmount").value = "";
       document.getElementById("txCheckNumber").value = "";
       document.getElementById("txLabel").value = "";
       document.getElementById("txCleared").checked = false;
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.CREATE, `users/${currentUser.uid}/transactions/${newTx.id}`, () =>
+          setDoc(txRef(currentUser.uid, newTx.id), buildTxPayload(currentUser.uid, newTx, true))
+        );
+      }
     }
 
     function openEditModal(txId) {
@@ -2656,41 +3765,67 @@
       const idx = state.transactions.findIndex(t => t.id === txId);
       if (idx === -1) return;
 
-      const paymentMethod = document.getElementById("editTxPaymentMethod").value || state.paymentMethods[0] || "Carte bancaire";
+      const paymentMethod = clampStr(document.getElementById("editTxPaymentMethod").value || state.paymentMethods[0] || "Carte bancaire", 80);
       const checkNumber = paymentMethod === "Chèque"
-        ? document.getElementById("editTxCheckNumber").value.trim()
+        ? clampStr(document.getElementById("editTxCheckNumber").value, 40)
         : "";
+      const amount = Math.max(0.01, parseFloat(document.getElementById("editTxAmount").value) || 0.01);
+      const label = clampStr(document.getElementById("editTxLabel").value, 200);
+      if (!label) return;
 
-      state.transactions[idx] = {
-        ...state.transactions[idx],
+      const updatedFields = {
         date: document.getElementById("editTxDate").value,
         accountId: document.getElementById("editTxAccount").value,
-        type: document.getElementById("editTxType").value,
-        amount: parseFloat(document.getElementById("editTxAmount").value),
+        type: document.getElementById("editTxType").value === "income" ? "income" : "expense",
+        amount: Number(amount.toFixed(2)),
         paymentMethod,
         checkNumber,
-        category: document.getElementById("editTxCategory").value,
-        subcategory: document.getElementById("editTxSubcategory").value || "",
-        payee: document.getElementById("editTxPayee").value || "",
-        label: document.getElementById("editTxLabel").value.trim(),
+        category: clampStr(document.getElementById("editTxCategory").value, 100),
+        subcategory: clampStr(document.getElementById("editTxSubcategory").value || "", 100),
+        payee: clampStr(document.getElementById("editTxPayee").value || "", 120),
+        label,
         cleared: document.getElementById("editTxCleared").checked
       };
 
+      state.transactions[idx] = {
+        ...state.transactions[idx],
+        ...updatedFields
+      };
+      state.transactions.sort((a, b) => b.date.localeCompare(a.date));
+
       closeEditModal();
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}/transactions/${txId}`, () =>
+          updateDoc(txRef(currentUser.uid, txId), { ...updatedFields, updatedAt: serverTimestamp() })
+        );
+      }
     }
 
     function toggleCleared(txId) {
       const tx = state.transactions.find(t => t.id === txId);
       if (!tx) return;
       tx.cleared = !tx.cleared;
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}/transactions/${txId}`, () =>
+          updateDoc(txRef(currentUser.uid, txId), { cleared: Boolean(tx.cleared), updatedAt: serverTimestamp() })
+        );
+      }
     }
 
     function deleteTransaction(txId) {
       state.transactions = state.transactions.filter(t => t.id !== txId);
       selectedTxIds.delete(txId);
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.DELETE, `users/${currentUser.uid}/transactions/${txId}`, () =>
+          deleteDoc(txRef(currentUser.uid, txId))
+        );
+      }
     }
 
     // --- ECHEANCIER AUTOMATIQUE & DATE DE FIN / ILLIMITE ---
@@ -2703,34 +3838,48 @@
 
     function addSchedule(e) {
       e.preventDefault();
-      const startDate = document.getElementById("schStartDate").value || "";
+      const startDate = normalizeDateOrEmpty(document.getElementById("schStartDate").value);
       const unlimited = document.getElementById("schUnlimited").checked;
-      const endDate = unlimited ? "" : document.getElementById("schEndDate").value;
+      const endDate = unlimited ? "" : normalizeDateOrEmpty(document.getElementById("schEndDate").value);
+      const amount = Math.max(0.01, parseFloat(document.getElementById("schAmount").value) || 0.01);
+      const label = clampStr(document.getElementById("schLabel").value, 200);
+      if (!label) return;
 
-      state.schedules.push({
-        id: "sch-" + Date.now(),
-        day: Number(document.getElementById("schDay").value),
+      const newSch = {
+        id: makeSafeId("sch", String(Date.now())),
+        day: Math.min(28, Math.max(1, Math.round(Number(document.getElementById("schDay").value || 1)))),
         accountId: document.getElementById("schAccount").value,
-        type: document.getElementById("schType").value,
-        amount: parseFloat(document.getElementById("schAmount").value),
+        type: document.getElementById("schType").value === "income" ? "income" : "expense",
+        amount: Number(amount.toFixed(2)),
         paymentMethod: state.paymentMethods.includes("Prélèvement") ? "Prélèvement" : (state.paymentMethods[0] || "Virement"),
         checkNumber: "",
-        category: document.getElementById("schCategory").value,
-        subcategory: document.getElementById("schSubcategory").value || "",
-        payee: document.getElementById("schPayee").value || "",
-        label: document.getElementById("schLabel").value.trim(),
+        category: clampStr(document.getElementById("schCategory").value, 100),
+        subcategory: clampStr(document.getElementById("schSubcategory").value || "", 100),
+        payee: clampStr(document.getElementById("schPayee").value || "", 120),
+        label,
         startDate,
         unlimited,
         endDate
-      });
+      };
+
+      state.schedules.push(newSch);
 
       document.getElementById("schLabel").value = "";
       document.getElementById("schAmount").value = "";
       document.getElementById("schUnlimited").checked = true;
       toggleScheduleEndInput("schUnlimited", "schEndDate");
 
-      injectSchedulesForMonth(getTodayLocalISO().slice(0, 7));
-      saveLocalData();
+      if (currentUser && db) {
+        saveLocalCache();
+        cloudExec(OperationType.CREATE, `users/${currentUser.uid}/schedules/${newSch.id}`, () =>
+          setDoc(scheduleRef(currentUser.uid, newSch.id), buildSchedulePayload(currentUser.uid, newSch, true))
+        ).then(() => {
+          injectSchedulesForMonth(getTodayLocalISO().slice(0, 7));
+        });
+      } else {
+        injectSchedulesForMonth(getTodayLocalISO().slice(0, 7));
+        saveLocalCache();
+      }
     }
 
     function openEditSchModal(schId) {
@@ -2770,32 +3919,53 @@
       const idx = state.schedules.findIndex(s => s.id === schId);
       if (idx === -1) return;
 
-      const startDate = document.getElementById("editSchStartDate").value || "";
+      const startDate = normalizeDateOrEmpty(document.getElementById("editSchStartDate").value);
       const unlimited = document.getElementById("editSchUnlimited").checked;
-      const endDate = unlimited ? "" : document.getElementById("editSchEndDate").value;
+      const endDate = unlimited ? "" : normalizeDateOrEmpty(document.getElementById("editSchEndDate").value);
+      const amount = Math.max(0.01, parseFloat(document.getElementById("editSchAmount").value) || 0.01);
+      const label = clampStr(document.getElementById("editSchLabel").value, 200);
+      if (!label) return;
 
-      state.schedules[idx] = {
-        ...state.schedules[idx],
-        day: Number(document.getElementById("editSchDay").value),
+      const updatedFields = {
+        day: Math.min(28, Math.max(1, Math.round(Number(document.getElementById("editSchDay").value || 1)))),
         accountId: document.getElementById("editSchAccount").value,
-        type: document.getElementById("editSchType").value,
-        amount: parseFloat(document.getElementById("editSchAmount").value),
-        category: document.getElementById("editSchCategory").value,
-        subcategory: document.getElementById("editSchSubcategory").value || "",
-        payee: document.getElementById("editSchPayee").value || "",
-        label: document.getElementById("editSchLabel").value.trim(),
+        type: document.getElementById("editSchType").value === "income" ? "income" : "expense",
+        amount: Number(amount.toFixed(2)),
+        paymentMethod: state.schedules[idx].paymentMethod || "Prélèvement",
+        checkNumber: state.schedules[idx].checkNumber || "",
+        category: clampStr(document.getElementById("editSchCategory").value, 100),
+        subcategory: clampStr(document.getElementById("editSchSubcategory").value || "", 100),
+        payee: clampStr(document.getElementById("editSchPayee").value || "", 120),
+        label,
         startDate,
         unlimited,
         endDate
       };
 
+      state.schedules[idx] = {
+        ...state.schedules[idx],
+        ...updatedFields
+      };
+
       closeEditSchModal();
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}/schedules/${schId}`, () =>
+          updateDoc(scheduleRef(currentUser.uid, schId), { ...updatedFields, updatedAt: serverTimestamp() })
+        );
+      }
     }
 
     function deleteSchedule(schId) {
       state.schedules = state.schedules.filter(s => s.id !== schId);
-      saveLocalData();
+      saveLocalCache();
+
+      if (currentUser && db) {
+        cloudExec(OperationType.DELETE, `users/${currentUser.uid}/schedules/${schId}`, () =>
+          deleteDoc(scheduleRef(currentUser.uid, schId))
+        );
+      }
     }
 
     function isScheduleActiveForDate(sch, dateStr) {
@@ -2806,26 +3976,29 @@
     }
 
     function injectSchedulesForMonth(monthVal) {
-      let added = 0;
+      const injectedTxs = [];
       for (const sch of state.schedules) {
+        if (!state.accounts.some(a => a.id === sch.accountId)) continue;
         const dayStr = String(Math.min(28, Math.max(1, sch.day))).padStart(2, "0");
         const dateStr = `${monthVal}-${dayStr}`;
         if (!isScheduleActiveForDate(sch, dateStr)) continue;
 
+        const deterministicId = makeSafeId("tx-sch", `${sch.id}-${monthVal}`);
         const exists = state.transactions.some(
           t =>
-            t.date === dateStr &&
-            t.accountId === sch.accountId &&
-            t.label.toLowerCase() === sch.label.toLowerCase() &&
-            Number(t.amount).toFixed(2) === Number(sch.amount).toFixed(2)
+            t.id === deterministicId ||
+            (t.date === dateStr &&
+              t.accountId === sch.accountId &&
+              t.label.toLowerCase() === sch.label.toLowerCase() &&
+              Number(t.amount).toFixed(2) === Number(sch.amount).toFixed(2))
         );
         if (!exists) {
-          state.transactions.unshift({
-            id: "tx-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+          const tx = {
+            id: deterministicId,
             date: dateStr,
             accountId: sch.accountId,
             type: sch.type,
-            amount: Number(sch.amount),
+            amount: Math.max(0.01, Number(Number(sch.amount).toFixed(2))),
             paymentMethod: sch.paymentMethod || (state.paymentMethods.includes("Prélèvement") ? "Prélèvement" : (state.paymentMethods[0] || "Virement")),
             checkNumber: sch.checkNumber || "",
             category: sch.category,
@@ -2833,14 +4006,26 @@
             payee: sch.payee || "",
             label: sch.label,
             cleared: false
-          });
-          added++;
+          };
+          state.transactions.unshift(tx);
+          injectedTxs.push(tx);
         }
       }
-      return added;
+
+      if (injectedTxs.length) {
+        state.transactions.sort((a, b) => b.date.localeCompare(a.date));
+        saveLocalCache();
+        if (currentUser && db) {
+          const uid = currentUser.uid;
+          const ops = injectedTxs.map(tx => ({ kind: "set", ref: txRef(uid, tx.id), data: buildTxPayload(uid, tx, true) }));
+          commitBatchOps(ops, `users/${uid}/transactions`);
+        }
+      }
+      return injectedTxs.length;
     }
 
     function autoInjectCurrentMonthOnLoad() {
+      if (currentUser) return;
       const currentMonth = getTodayLocalISO().slice(0, 7);
       const added = injectSchedulesForMonth(currentMonth);
       if (added > 0) {
@@ -2851,7 +4036,7 @@
     function applySchedulesForCurrentMonth() {
       const monthVal = document.getElementById("filterMonth").value || getTodayLocalISO().slice(0, 7);
       const added = injectSchedulesForMonth(monthVal);
-      saveLocalData();
+      saveLocalCache();
       alert(`${added} opération(s) injectée(s) pour ${monthVal}.`);
     }
 
@@ -2882,7 +4067,12 @@
       document.getElementById("filterPayee").value = "ALL";
       document.getElementById("filterSearch").value = "";
       state.selectedAccountId = "ALL";
-      saveLocalData(false);
+      saveLocalCache(false);
+      if (currentUser && db) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}`, () =>
+          updateDoc(userRef(currentUser.uid), { selectedAccountId: "ALL", updatedAt: serverTimestamp() })
+        );
+      }
     }
 
     function exportJSON() {
@@ -2890,7 +4080,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = state.driveConfig.fileName || "comptes_perso.json";
+      a.download = "comptes_perso.json";
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -2899,230 +4089,56 @@
       const file = event.target.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         try {
           const parsed = JSON.parse(reader.result);
           if (!Array.isArray(parsed.accounts) || !Array.isArray(parsed.transactions)) {
             alert("Fichier JSON invalide.");
             return;
           }
-          state = { ...cloneDefaultData(), ...parsed };
+          const preservedTheme = state.theme;
+          state = normalizeStateShape(parsed);
+          if (!parsed.theme) state.theme = preservedTheme;
+          const importedState = JSON.parse(JSON.stringify(state));
+          applyThemeUI(state.theme);
           selectedTxIds.clear();
-          saveLocalData();
+          saveLocalCache();
+
+          if (currentUser && db) {
+            const uid = currentUser.uid;
+            setSyncStatus("Import JSON vers le cloud en cours...");
+            unsubscribeCloudListeners();
+            try {
+              await clearCloudSubcollections(uid);
+              const snap = await getDoc(userRef(uid));
+              await pushFullStateToCloud(uid, snap.exists(), importedState);
+              state = importedState;
+              saveLocalCache();
+              setSyncStatus(`Synchro auto active • ${currentUser.email || ""}`);
+            } finally {
+              attachCloudListeners(uid);
+            }
+          }
+
           alert("Données importées avec succès.");
-        } catch {
-          alert("Impossible de lire ce fichier JSON.");
+        } catch (err) {
+          console.error(err);
+          alert("Impossible de lire ou synchroniser ce fichier JSON.");
+        } finally {
+          event.target.value = "";
         }
       };
       reader.readAsText(file);
     }
 
-    function saveDriveConfig() {
-      state.driveConfig.clientId = document.getElementById("googleClientId").value.trim();
-      state.driveConfig.fileName = document.getElementById("driveFileName").value.trim() || "comptes_perso.json";
-      saveLocalData();
-      alert("Paramètres Google Drive enregistrés.");
-    }
-
-    function setSyncStatus(msg) {
-      document.getElementById("syncStatus").textContent = msg;
-    }
-
-    function requestGoogleDriveAuth(onAuthorized) {
-      const clientId = state.driveConfig.clientId || document.getElementById("googleClientId").value.trim();
-      if (!clientId) {
-        alert("Veuillez d'abord renseigner votre Google OAuth Client ID dans l'onglet 'Paramètres & Google Drive'.");
-        switchTab("drive");
-        return;
-      }
-      if (!window.google || !google.accounts || !google.accounts.oauth2) {
-        alert("Le service d'authentification Google n'est pas encore chargé. Réessayez dans 2 secondes.");
-        return;
-      }
-
-      setSyncStatus("Connexion à Google Drive en cours...");
-
-      const tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: clientId,
-        scope: "https://www.googleapis.com/auth/drive.file",
-        callback: async (tokenResponse) => {
-          if (tokenResponse.error) {
-            setSyncStatus("Erreur de connexion Google");
-            alert("Connexion Google annulée ou refusée.");
-            return;
-          }
-          googleAccessToken = tokenResponse.access_token;
-          await onAuthorized();
-        }
-      });
-
-      tokenClient.requestAccessToken({ prompt: googleAccessToken ? "" : "consent" });
-    }
-
-    async function findDriveFileId(headers, fileName) {
-      let fileId = localStorage.getItem(DRIVE_FILE_ID_KEY);
-      if (!fileId) {
-        const q = encodeURIComponent(`name='${fileName.replace(/'/g, "\\'")}' and trashed=false`);
-        const searchRes = await fetch(
-          `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)`,
-          { headers }
-        );
-        const searchJson = await searchRes.json();
-        if (searchJson.files && searchJson.files.length > 0) {
-          fileId = searchJson.files[0].id;
-          localStorage.setItem(DRIVE_FILE_ID_KEY, fileId);
-        }
-      }
-      return fileId;
-    }
-
-    async function downloadFromDrive() {
-      requestGoogleDriveAuth(async () => {
-        const fileName = state.driveConfig.fileName || "comptes_perso.json";
-        const headers = { Authorization: `Bearer ${googleAccessToken}` };
-
-        try {
-          const fileId = await findDriveFileId(headers, fileName);
-          if (!fileId) {
-            alert(`Aucun fichier « ${fileName} » trouvé sur Google Drive.`);
-            setSyncStatus("Fichier Drive introuvable");
-            return;
-          }
-
-          const getRes = await fetch(
-            `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-            { headers }
-          );
-          if (!getRes.ok) {
-            throw new Error("Lecture Drive impossible");
-          }
-
-          const remoteData = await getRes.json();
-          if (!Array.isArray(remoteData.transactions) || !Array.isArray(remoteData.accounts)) {
-            alert("Le fichier sur Google Drive ne contient pas de données valides.");
-            return;
-          }
-
-          const remoteDateStr = remoteData.updatedAt
-            ? new Date(remoteData.updatedAt).toLocaleString("fr-FR")
-            : "date inconnue";
-          const ok = confirm(
-            `Télécharger depuis Drive (« ${fileName} ») ?\n` +
-            `• Version Drive : ${remoteDateStr} (${remoteData.transactions.length} opération(s))\n` +
-            `• Version locale actuelle : ${state.transactions.length} opération(s)\n\n` +
-            `Les données locales de ce navigateur seront remplacées (le fichier sur Drive ne sera pas modifié).`
-          );
-          if (!ok) {
-            setSyncStatus("Téléchargement Drive annulé");
-            return;
-          }
-
-          state = { ...cloneDefaultData(), ...remoteData };
-          selectedTxIds.clear();
-          saveLocalData(false);
-          setSyncStatus(`Téléchargé depuis Drive (${new Date().toLocaleTimeString("fr-FR")})`);
-          alert("Données téléchargées depuis Google Drive avec succès.");
-        } catch (err) {
-          console.error(err);
-          setSyncStatus("Erreur de téléchargement Drive");
-          alert("Impossible de télécharger depuis Google Drive.");
-        }
-      });
-    }
-
-    async function uploadToDrive() {
-      requestGoogleDriveAuth(async () => {
-        await performDriveUpload();
-      });
-    }
-
-    async function syncWithGoogleDrive() {
-      await uploadToDrive();
-    }
-
-    async function performDriveUpload() {
-      const fileName = state.driveConfig.fileName || "comptes_perso.json";
-      const headers = { Authorization: `Bearer ${googleAccessToken}` };
-
-      try {
-        let fileId = await findDriveFileId(headers, fileName);
-        let remoteData = null;
-
-        if (fileId) {
-          const getRes = await fetch(
-            `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-            { headers }
-          );
-          if (getRes.ok) {
-            remoteData = await getRes.json();
-          }
-        }
-
-        if (fileId && remoteData && Array.isArray(remoteData.transactions)) {
-          const remoteTime = new Date(remoteData.updatedAt || 0).getTime();
-          const localTime = new Date(state.updatedAt || 0).getTime();
-          const remoteDateStr = remoteData.updatedAt
-            ? new Date(remoteData.updatedAt).toLocaleString("fr-FR")
-            : "date inconnue";
-          const warning = remoteTime > localTime
-            ? `ATTENTION : la version sur Drive semble PLUS RÉCENTE que vos données locales !\n\n`
-            : "";
-          const ok = confirm(
-            `${warning}Envoyer les données de cet appareil vers Drive et remplacer « ${fileName} » ?\n` +
-            `• Version actuelle sur Drive : ${remoteDateStr} (${remoteData.transactions.length} opération(s))\n` +
-            `• Version locale à envoyer : ${state.transactions.length} opération(s)`
-          );
-          if (!ok) {
-            setSyncStatus("Envoi annulé (Drive non modifié)");
-            return;
-          }
-        }
-
-        state.updatedAt = new Date().toISOString();
-        const payload = JSON.stringify(state, null, 2);
-
-        if (!fileId) {
-          const metadata = { name: fileName, mimeType: "application/json" };
-          const form = new FormData();
-          form.append("metadata", new Blob([JSON.stringify(metadata)], { type: "application/json" }));
-          form.append("file", new Blob([payload], { type: "application/json" }));
-
-          const createRes = await fetch(
-            "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id",
-            { method: "POST", headers, body: form }
-          );
-          const created = await createRes.json();
-          if (created.id) {
-            fileId = created.id;
-            localStorage.setItem(DRIVE_FILE_ID_KEY, fileId);
-          }
-        } else {
-          await fetch(
-            `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,
-            {
-              method: "PATCH",
-              headers: { ...headers, "Content-Type": "application/json" },
-              body: payload
-            }
-          );
-        }
-
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        setSyncStatus(`Envoyé sur Drive (${new Date().toLocaleTimeString("fr-FR")})`);
-        alert("Envoi vers Google Drive réussi.");
-      } catch (err) {
-        console.error(err);
-        setSyncStatus("Erreur de synchronisation Drive");
-        alert("Impossible de synchroniser avec Google Drive. Vérifiez votre connexion et votre Client ID.");
-      }
-    }
-
     function renderAll() {
+      const prevTxAcc = document.getElementById("txAccount").value;
       const prevTxPmt = document.getElementById("txPaymentMethod").value;
       const prevTxCat = document.getElementById("txCategory").value;
       const prevTxSub = document.getElementById("txSubcategory").value;
       const prevTxPayee = document.getElementById("txPayee").value;
 
+      const prevSchAcc = document.getElementById("schAccount").value;
       const prevSchCat = document.getElementById("schCategory").value;
       const prevSchSub = document.getElementById("schSubcategory").value;
       const prevSchPayee = document.getElementById("schPayee").value;
@@ -3134,8 +4150,13 @@
       const accOptions = state.accounts
         .map(a => `<option value="${a.id}">${a.name}</option>`)
         .join("");
-      document.getElementById("txAccount").innerHTML = accOptions;
-      document.getElementById("schAccount").innerHTML = accOptions;
+      const txAccEl = document.getElementById("txAccount");
+      txAccEl.innerHTML = accOptions;
+      if (prevTxAcc && state.accounts.some(a => a.id === prevTxAcc)) txAccEl.value = prevTxAcc;
+
+      const schAccEl = document.getElementById("schAccount");
+      schAccEl.innerHTML = accOptions;
+      if (prevSchAcc && state.accounts.some(a => a.id === prevSchAcc)) schAccEl.value = prevSchAcc;
 
       populatePaymentMethodSelect("txPaymentMethod", prevTxPmt);
       toggleCheckNumberInput("txPaymentMethod", "txCheckNumberWrap", "txCheckNumber");
@@ -3166,9 +4187,6 @@
       populatePayeeSelect("schPayee", prevSchPayee, false);
       populatePayeeSelect("filterPayee", prevFilterPayee, true);
 
-      document.getElementById("googleClientId").value = state.driveConfig.clientId || "";
-      document.getElementById("driveFileName").value = state.driveConfig.fileName || "comptes_perso.json";
-
       document.getElementById("paymentMethodsTableBody").innerHTML = state.paymentMethods
         .map(m => {
           const safeM = m.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
@@ -3195,7 +4213,7 @@
           clearedAll += bal.cleared;
           forecastAll += bal.forecast;
           const selected = state.selectedAccountId === acc.id ? "selected" : "";
-          const calBtn = `<button type="button" class="btn-small btn-secondary" style="color:var(--text);border-color:var(--border);" title="Caler le solde pointé et le solde réel" onclick="calibrateAccountPrompt('${acc.id}', event)">Caler</button>`;
+          const calBtn = `<button type="button" class="btn-small btn-outline" title="Caler le solde pointé et le solde réel" onclick="calibrateAccountPrompt('${acc.id}', event)">Caler</button>`;
           const editBtn = `<button type="button" class="btn-edit" title="Modifier le nom ou le solde initial" onclick="editAccountPrompt('${acc.id}', event)">Modifier</button>`;
           const delBtn = canDeleteAcc
             ? `<button type="button" class="btn-danger" title="Supprimer ce compte" onclick="deleteAccount('${acc.id}', event)">Suppr.</button>`
@@ -3207,7 +4225,7 @@
                 <span class="muted">Initial : ${formatEur(acc.initialBalance || 0)} • Pointé : ${formatEur(bal.cleared)} • Prévision : ${formatEur(bal.forecast)}</span>
               </div>
               <div class="account-right">
-                <div class="${bal.current >= 0 ? "pos" : "neg"}" style="font-weight:700;">
+                <div class="num-tabular ${bal.current >= 0 ? "pos" : "neg"}" style="font-weight:700;">
                   ${formatEur(bal.current)}
                 </div>
                 ${calBtn}
@@ -3226,7 +4244,7 @@
             <strong>Tous les comptes</strong><br />
             <span class="muted">Prévision totale : ${formatEur(forecastAll)}</span>
           </div>
-          <strong class="${totalAll >= 0 ? "pos" : "neg"}">${formatEur(totalAll)}</strong>
+          <strong class="num-tabular ${totalAll >= 0 ? "pos" : "neg"}">${formatEur(totalAll)}</strong>
         </div>` + accountsHtml;
 
       const selectedAccObj = state.accounts.find(a => a.id === state.selectedAccountId);
@@ -3322,7 +4340,7 @@
                     </td>
                     <td class="cell-actions" style="white-space:nowrap;">
                       <button class="btn-edit" onclick="openEditModal('${tx.id}')">Modifier</button>
-                      <button class="btn-small btn-secondary" style="color:var(--text);border-color:var(--border);" onclick="toggleCleared('${tx.id}')">Pointer</button>
+                      <button class="btn-small btn-outline" onclick="toggleCleared('${tx.id}')">Pointer</button>
                       <button class="btn-danger" onclick="deleteTransaction('${tx.id}')">Suppr.</button>
                     </td>
                   </tr>
@@ -3435,8 +4453,74 @@
 
     function selectAccount(accId) {
       state.selectedAccountId = accId;
-      saveLocalData(false);
+      saveLocalCache(false);
+      if (currentUser && db) {
+        cloudExec(OperationType.UPDATE, `users/${currentUser.uid}`, () =>
+          updateDoc(userRef(currentUser.uid), {
+            selectedAccountId: isValidDocId(accId) ? accId : "ALL",
+            updatedAt: serverTimestamp()
+          })
+        );
+      }
     }
+
+    Object.assign(window, {
+      toggleMobileHeaderActions,
+      switchTab,
+      handleAuthClick,
+      signInWithGoogle,
+      signOutCloud,
+      toggleTheme,
+      setTheme,
+      toggleCheckNumberInput,
+      quickAddPaymentMethod,
+      addPaymentMethodForm,
+      deletePaymentMethod,
+      deleteAccount,
+      toggleSelectTx,
+      toggleSelectAll,
+      clearSelection,
+      bulkDeleteTransactions,
+      bulkSetCleared,
+      populateSubcategorySelect,
+      quickAddPayee,
+      addAccountPrompt,
+      editAccountPrompt,
+      calibrateAccountPrompt,
+      addCategoryForm,
+      addSubcategoryForm,
+      deleteSubcategory,
+      openEditCatModal,
+      closeEditCatModal,
+      saveEditedCategory,
+      deleteCategory,
+      addPayeeForm,
+      openEditPayeeModal,
+      closeEditPayeeModal,
+      saveEditedPayee,
+      deletePayee,
+      openStatementImportModal,
+      closeStatementImportModal,
+      handleStatementImport,
+      addTransaction,
+      openEditModal,
+      closeEditModal,
+      saveEditedTransaction,
+      toggleCleared,
+      deleteTransaction,
+      toggleScheduleEndInput,
+      addSchedule,
+      openEditSchModal,
+      closeEditSchModal,
+      saveEditedSchedule,
+      deleteSchedule,
+      applySchedulesForCurrentMonth,
+      clearFilters,
+      exportJSON,
+      importJSON,
+      selectAccount,
+      renderAll
+    });
 
     let lastCompactChart = window.innerWidth <= 640;
     window.addEventListener("resize", () => {
@@ -3450,6 +4534,8 @@
     document.getElementById("txDate").value = getTodayLocalISO();
     autoInjectCurrentMonthOnLoad();
     renderAll();
+    updateAuthUI();
+    initFirebase();
   </script>
 </body>
 </html>
