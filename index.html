@@ -451,6 +451,50 @@
       margin-bottom: 16px;
     }
 
+    .sync-error-banner {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: #dc2626;
+      color: #ffffff;
+      border-bottom: 1px solid #991b1b;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(153, 27, 27, 0.28);
+    }
+
+    .sync-error-banner.hidden {
+      display: none;
+    }
+
+    .sync-error-banner-inner {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .sync-error-close {
+      background: #ffffff;
+      color: #991b1b;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .sync-error-close:hover {
+      background: #fee2e2;
+    }
+
     .theme-selector-group {
       display: inline-flex;
       gap: 8px;
@@ -1105,6 +1149,12 @@
   </style>
 </head>
 <body>
+  <div id="syncErrorBanner" class="sync-error-banner hidden" role="alert" aria-live="assertive">
+    <div class="sync-error-banner-inner">
+      <span>Une modification n'a pas pu être enregistrée dans le cloud et risque de disparaître. Vérifiez votre connexion.</span>
+      <button type="button" class="sync-error-close" onclick="dismissSyncErrorBanner()">Fermer</button>
+    </div>
+  </div>
   <header>
     <div class="header-inner">
       <div class="brand">
@@ -1823,6 +1873,9 @@
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
     import {
       getFirestore,
+      initializeFirestore,
+      persistentLocalCache,
+      persistentMultipleTabManager,
       doc,
       collection,
       getDoc,
@@ -2165,7 +2218,22 @@
 
     function setSyncStatus(msg) {
       const el = document.getElementById("syncStatus");
-      if (el) el.textContent = msg;
+      if (!el) return;
+      if (typeof navigator !== "undefined" && navigator.onLine === false) {
+        el.textContent = "Hors ligne — les modifications seront envoyées au retour du réseau";
+        return;
+      }
+      el.textContent = msg;
+    }
+
+    function showSyncErrorBanner() {
+      const banner = document.getElementById("syncErrorBanner");
+      if (banner) banner.classList.remove("hidden");
+    }
+
+    function dismissSyncErrorBanner() {
+      const banner = document.getElementById("syncErrorBanner");
+      if (banner) banner.classList.add("hidden");
     }
 
     function handleFirestoreError(error, operationType, path) {
@@ -2186,8 +2254,20 @@
         path
       };
       console.error("Firestore Error:", JSON.stringify(errInfo));
-      setSyncStatus("Erreur de synchro Cloud — vérifiez votre connexion");
-      throw new Error(JSON.stringify(errInfo));
+      const isWriteOp =
+        operationType === OperationType.CREATE ||
+        operationType === OperationType.UPDATE ||
+        operationType === OperationType.DELETE ||
+        operationType === OperationType.WRITE;
+      if (isWriteOp) {
+        showSyncErrorBanner();
+      }
+      if (typeof navigator !== "undefined" && navigator.onLine === false) {
+        setSyncStatus("Hors ligne — les modifications seront envoyées au retour du réseau");
+      } else {
+        setSyncStatus("Erreur de synchro Cloud — vérifiez votre connexion");
+      }
+      return errInfo;
     }
 
     async function testConnection() {
@@ -2197,7 +2277,7 @@
       } catch (error) {
         if (error instanceof Error && error.message.includes("the client is offline")) {
           console.error("Please check your Firebase configuration.");
-          setSyncStatus("Hors ligne — synchronisation en attente");
+          setSyncStatus("Hors ligne — les modifications seront envoyées au retour du réseau");
         }
       }
     }
@@ -2329,7 +2409,7 @@
     }
 
     async function commitBatchOps(ops, pathLabel) {
-      if (!db || !ops.length) return;
+      if (!db || !ops.length) return true;
       const CHUNK_SIZE = 400;
       try {
         for (let i = 0; i < ops.length; i += CHUNK_SIZE) {
@@ -2342,19 +2422,25 @@
           }
           await batch.commit();
         }
+        return true;
       } catch (error) {
+        showSyncErrorBanner();
         handleFirestoreError(error, OperationType.WRITE, pathLabel);
+        return false;
       }
     }
 
     async function cloudExec(opType, path, fn) {
-      if (!db || !currentUser) return;
+      if (!db || !currentUser) return true;
       setSyncStatus(`Synchronisation... (${currentUser.email || ""})`);
       try {
         await fn();
         setSyncStatus(`Synchro auto active • ${currentUser.email || ""}`);
+        return true;
       } catch (error) {
+        showSyncErrorBanner();
         handleFirestoreError(error, opType, path);
+        return false;
       }
     }
 
@@ -2652,7 +2738,20 @@
         if (!res.ok) throw new Error("Config Firebase introuvable");
         const firebaseConfig = await res.json();
         firebaseApp = initializeApp(firebaseConfig);
-        db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+        try {
+          db = initializeFirestore(
+            firebaseApp,
+            {
+              localCache: persistentLocalCache({
+                tabManager: persistentMultipleTabManager()
+              })
+            },
+            firebaseConfig.firestoreDatabaseId
+          );
+        } catch (cacheErr) {
+          console.warn("Persistent local cache unavailable, falling back:", cacheErr);
+          db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+        }
         auth = getAuth(firebaseApp);
 
         await testConnection();
@@ -4719,6 +4818,7 @@
     }
 
     Object.assign(window, {
+      dismissSyncErrorBanner,
       toggleMobileAccountsSection,
       toggleMobileHeaderActions,
       switchTab,
@@ -4784,6 +4884,18 @@
         lastCompactChart = nowCompact;
         renderBalanceChart(document.getElementById("filterMonth").value);
       }
+    });
+
+    window.addEventListener("offline", () => {
+      setSyncStatus("Hors ligne — les modifications seront envoyées au retour du réseau");
+    });
+
+    window.addEventListener("online", () => {
+      setSyncStatus(
+        currentUser
+          ? `Synchro auto active • ${currentUser.email || ""}`
+          : "Mode local • Connexion Cloud requise pour PC & Téléphone"
+      );
     });
 
     document.getElementById("txDate").value = getTodayLocalISO();
