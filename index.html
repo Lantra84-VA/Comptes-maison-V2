@@ -2489,7 +2489,7 @@
         ops.push({ kind: "set", ref: txRef(uid, tx.id), data: buildTxPayload(uid, tx, true) });
       }
 
-      await commitBatchOps(ops, `users/${uid}`);
+      return await commitBatchOps(ops, `users/${uid}`);
     }
 
     async function clearCloudSubcollections(uid) {
@@ -2503,11 +2503,13 @@
           snap.forEach(d => deleteOps.push({ kind: "delete", ref: d.ref }));
         } catch (error) {
           handleFirestoreError(error, OperationType.LIST, path);
+          return false;
         }
       }
       if (deleteOps.length) {
-        await commitBatchOps(deleteOps, `users/${uid}`);
+        return await commitBatchOps(deleteOps, `users/${uid}`);
       }
+      return true;
     }
 
     function unsubscribeCloudListeners() {
@@ -2579,6 +2581,7 @@
       cloudListeners.push(
         onSnapshot(
           userRef(uid),
+          { includeMetadataChanges: true },
           snap => {
             if (snap.exists()) {
               const data = snap.data();
@@ -2599,7 +2602,9 @@
               }
               saveLocalCache(false);
             }
-            loadedFlags.user = true;
+            if (!snap.metadata.fromCache) {
+              loadedFlags.user = true;
+            }
             maybeFinishHydration();
           },
           error => handleFirestoreError(error, OperationType.GET, `users/${uid}`)
@@ -2609,6 +2614,7 @@
       cloudListeners.push(
         onSnapshot(
           query(collection(db, "users", uid, "accounts"), where("ownerId", "==", uid)),
+          { includeMetadataChanges: true },
           snap => {
             const list = [];
             snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -2620,7 +2626,9 @@
                 initialBalance: Number(a.initialBalance || 0)
               }));
             }
-            loadedFlags.accounts = true;
+            if (!snap.metadata.fromCache) {
+              loadedFlags.accounts = true;
+            }
             saveLocalCache(false);
             maybeFinishHydration();
           },
@@ -2631,6 +2639,7 @@
       cloudListeners.push(
         onSnapshot(
           query(collection(db, "users", uid, "categories"), where("ownerId", "==", uid)),
+          { includeMetadataChanges: true },
           snap => {
             const list = [];
             snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -2643,7 +2652,9 @@
                 subcategories: Array.isArray(c.subcategories) ? c.subcategories : []
               }));
             }
-            loadedFlags.categories = true;
+            if (!snap.metadata.fromCache) {
+              loadedFlags.categories = true;
+            }
             saveLocalCache(false);
             maybeFinishHydration();
           },
@@ -2654,6 +2665,7 @@
       cloudListeners.push(
         onSnapshot(
           query(collection(db, "users", uid, "payees"), where("ownerId", "==", uid)),
+          { includeMetadataChanges: true },
           snap => {
             const list = [];
             snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -2663,7 +2675,9 @@
               name: p.name,
               defaultCategory: p.defaultCategory || ""
             }));
-            loadedFlags.payees = true;
+            if (!snap.metadata.fromCache) {
+              loadedFlags.payees = true;
+            }
             saveLocalCache(false);
             maybeFinishHydration();
           },
@@ -2674,6 +2688,7 @@
       cloudListeners.push(
         onSnapshot(
           query(collection(db, "users", uid, "schedules"), where("ownerId", "==", uid)),
+          { includeMetadataChanges: true },
           snap => {
             const list = [];
             snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -2694,7 +2709,9 @@
               unlimited: s.unlimited !== undefined ? Boolean(s.unlimited) : !s.endDate,
               endDate: s.endDate || ""
             }));
-            loadedFlags.schedules = true;
+            if (!snap.metadata.fromCache) {
+              loadedFlags.schedules = true;
+            }
             saveLocalCache(false);
             maybeFinishHydration();
           },
@@ -2705,6 +2722,7 @@
       cloudListeners.push(
         onSnapshot(
           query(collection(db, "users", uid, "transactions"), where("ownerId", "==", uid)),
+          { includeMetadataChanges: true },
           snap => {
             const list = [];
             snap.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -2723,7 +2741,9 @@
               label: t.label,
               cleared: Boolean(t.cleared)
             }));
-            loadedFlags.transactions = true;
+            if (!snap.metadata.fromCache) {
+              loadedFlags.transactions = true;
+            }
             saveLocalCache(false);
             maybeFinishHydration();
           },
@@ -2769,7 +2789,8 @@
           try {
             const snap = await getDoc(userRef(user.uid));
             if (!snap.exists()) {
-              await pushFullStateToCloud(user.uid, false);
+              const pushed = await pushFullStateToCloud(user.uid, false);
+              if (!pushed) return;
             }
             attachCloudListeners(user.uid);
             setSyncStatus(`Synchro auto active • ${user.email || ""}`);
@@ -4205,8 +4226,10 @@
         saveLocalCache();
         cloudExec(OperationType.CREATE, `users/${currentUser.uid}/schedules/${newSch.id}`, () =>
           setDoc(scheduleRef(currentUser.uid, newSch.id), buildSchedulePayload(currentUser.uid, newSch, true))
-        ).then(() => {
-          injectSchedulesForMonth(getTodayLocalISO().slice(0, 7));
+        ).then(ok => {
+          if (ok) {
+            injectSchedulesForMonth(getTodayLocalISO().slice(0, 7));
+          }
         });
       } else {
         injectSchedulesForMonth(getTodayLocalISO().slice(0, 7));
@@ -4461,23 +4484,36 @@
           selectedTxIds.clear();
           saveLocalCache();
 
+          let cloudSyncOk = true;
           if (currentUser && db) {
             const uid = currentUser.uid;
             setSyncStatus("Import JSON vers le cloud en cours...");
             unsubscribeCloudListeners();
             try {
-              await clearCloudSubcollections(uid);
-              const snap = await getDoc(userRef(uid));
-              await pushFullStateToCloud(uid, snap.exists(), importedState);
-              state = importedState;
-              saveLocalCache();
-              setSyncStatus(`Synchro auto active • ${currentUser.email || ""}`);
+              const cleared = await clearCloudSubcollections(uid);
+              if (!cleared) {
+                cloudSyncOk = false;
+              } else {
+                const snap = await getDoc(userRef(uid));
+                const pushed = await pushFullStateToCloud(uid, snap.exists(), importedState);
+                if (!pushed) {
+                  cloudSyncOk = false;
+                } else {
+                  state = importedState;
+                  saveLocalCache();
+                  setSyncStatus(`Synchro auto active • ${currentUser.email || ""}`);
+                }
+              }
             } finally {
               attachCloudListeners(uid);
             }
           }
 
-          alert("Données importées avec succès.");
+          if (cloudSyncOk) {
+            alert("Données importées avec succès.");
+          } else {
+            alert("Les données ont été importées localement, mais l'envoi vers le cloud a échoué. Vérifiez votre connexion.");
+          }
         } catch (err) {
           console.error(err);
           alert("Impossible de lire ou synchroniser ce fichier JSON.");
