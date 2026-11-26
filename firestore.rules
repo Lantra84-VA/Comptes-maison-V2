@@ -41,7 +41,7 @@ service cloud.firestore {
     // 3. Entity Validation Blueprints
     function isValidUserSettings(data, userId) {
       return data.keys().hasAll(['uid', 'theme', 'selectedAccountId', 'paymentMethods', 'updatedAt'])
-        && data.keys().hasOnly(['uid', 'theme', 'selectedAccountId', 'paymentMethods', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'theme', 'selectedAccountId', 'paymentMethods', 'skippedOccurrences', 'updatedAt'])
         && data.uid is string
         && data.uid == userId
         && data.uid == request.auth.uid
@@ -56,6 +56,21 @@ service cloud.firestore {
         && data.paymentMethods[0] is string
         && data.paymentMethods[0].size() >= 1
         && data.paymentMethods[0].size() <= 80
+        && (
+          !('skippedOccurrences' in data)
+          || (
+            data.skippedOccurrences is list
+            && data.skippedOccurrences.size() <= 100
+            && (
+              data.skippedOccurrences.size() == 0
+              || (
+                data.skippedOccurrences[0] is string
+                && data.skippedOccurrences[0].size() >= 1
+                && data.skippedOccurrences[0].size() <= 128
+              )
+            )
+          )
+        )
         && data.updatedAt is timestamp;
     }
 
@@ -230,7 +245,9 @@ service cloud.firestore {
           incoming().diff(existing()).affectedKeys().hasOnly(['theme', 'updatedAt']) ||
           incoming().diff(existing()).affectedKeys().hasOnly(['selectedAccountId', 'updatedAt']) ||
           incoming().diff(existing()).affectedKeys().hasOnly(['paymentMethods', 'updatedAt']) ||
-          incoming().diff(existing()).affectedKeys().hasOnly(['theme', 'selectedAccountId', 'paymentMethods', 'updatedAt'])
+          incoming().diff(existing()).affectedKeys().hasOnly(['skippedOccurrences', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['theme', 'selectedAccountId', 'paymentMethods', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['theme', 'selectedAccountId', 'paymentMethods', 'skippedOccurrences', 'updatedAt'])
         );
       allow delete: if isVerifiedOwner(userId) && isValidId(userId);
 

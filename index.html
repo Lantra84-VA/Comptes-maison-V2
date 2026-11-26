@@ -1890,6 +1890,36 @@
       return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(s) ? s : "";
     }
 
+    function normalizeSkippedOccurrences(raw) {
+      if (!Array.isArray(raw)) return [];
+      const out = [];
+      const seen = new Set();
+      for (const item of raw) {
+        if (typeof item !== "string") continue;
+        const clean = item.trim().slice(0, 128);
+        if (!clean || seen.has(clean)) continue;
+        seen.add(clean);
+        out.push(clean);
+      }
+      return out.slice(-100);
+    }
+
+    function addSkippedOccurrenceIds(ids) {
+      const list = normalizeSkippedOccurrences(state.skippedOccurrences);
+      let changed = false;
+      for (const rawId of ids) {
+        if (typeof rawId !== "string") continue;
+        const clean = rawId.trim().slice(0, 128);
+        if (!clean.startsWith("tx-sch-")) continue;
+        if (!list.includes(clean)) {
+          list.push(clean);
+          changed = true;
+        }
+      }
+      state.skippedOccurrences = list.slice(-100);
+      return changed;
+    }
+
     function ensureUniqueIds(items, prefix, nameSelector) {
       const seen = new Set();
       return items.map((item, idx) => {
@@ -1964,7 +1994,8 @@
           unlimited: true,
           endDate: ""
         }
-      ]
+      ],
+      skippedOccurrences: []
     };
 
     function normalizeStateShape(rawParsed) {
@@ -2076,6 +2107,8 @@
         "sch",
         (_, i) => String(i + 1)
       );
+
+      merged.skippedOccurrences = normalizeSkippedOccurrences(merged.skippedOccurrences);
 
       return merged;
     }
@@ -2199,6 +2232,7 @@
         theme: state.theme === "dark" ? "dark" : "light",
         selectedAccountId: isValidDocId(state.selectedAccountId) ? state.selectedAccountId : "ALL",
         paymentMethods: state.paymentMethods.slice(0, 30),
+        skippedOccurrences: normalizeSkippedOccurrences(state.skippedOccurrences),
         updatedAt: serverTimestamp()
       };
     }
@@ -2334,6 +2368,7 @@
             theme: sourceState.theme === "dark" ? "dark" : "light",
             selectedAccountId: isValidDocId(sourceState.selectedAccountId) ? sourceState.selectedAccountId : "ALL",
             paymentMethods: sourceState.paymentMethods.slice(0, 30),
+            skippedOccurrences: normalizeSkippedOccurrences(sourceState.skippedOccurrences),
             updatedAt: serverTimestamp()
           }
         });
@@ -2346,6 +2381,7 @@
             theme: sourceState.theme === "dark" ? "dark" : "light",
             selectedAccountId: isValidDocId(sourceState.selectedAccountId) ? sourceState.selectedAccountId : "ALL",
             paymentMethods: sourceState.paymentMethods.slice(0, 30),
+            skippedOccurrences: normalizeSkippedOccurrences(sourceState.skippedOccurrences),
             updatedAt: serverTimestamp()
           }
         });
@@ -2469,6 +2505,11 @@
               }
               if (Array.isArray(data.paymentMethods) && data.paymentMethods.length) {
                 state.paymentMethods = data.paymentMethods;
+              }
+              if (Array.isArray(data.skippedOccurrences)) {
+                state.skippedOccurrences = normalizeSkippedOccurrences(data.skippedOccurrences);
+              } else if (!("skippedOccurrences" in data)) {
+                state.skippedOccurrences = [];
               }
               saveLocalCache(false);
             }
@@ -2908,6 +2949,7 @@
       if (!count) return;
       if (!confirm(`Supprimer définitivement les ${count} opération(s) sélectionnée(s) ?`)) return;
       const ids = [...selectedTxIds];
+      const skippedChanged = addSkippedOccurrenceIds(ids);
       state.transactions = state.transactions.filter(t => !selectedTxIds.has(t.id));
       selectedTxIds.clear();
       saveLocalCache();
@@ -2915,6 +2957,13 @@
       if (currentUser && db) {
         const uid = currentUser.uid;
         const ops = ids.map(id => ({ kind: "delete", ref: txRef(uid, id) }));
+        if (skippedChanged) {
+          ops.push({
+            kind: "update",
+            ref: userRef(uid),
+            data: { skippedOccurrences: state.skippedOccurrences, updatedAt: serverTimestamp() }
+          });
+        }
         commitBatchOps(ops, `users/${uid}/transactions`);
       }
     }
@@ -3653,31 +3702,69 @@
       return res;
     }
 
+    function isCSVDateCell(raw) {
+      const clean = String(raw || "").replace(/['"]/g, "").trim();
+      if (!clean) return false;
+      return (
+        /^\d{4}[-/]\d{1,2}[-/]\d{1,2}(?:[T\s].*)?$/.test(clean) ||
+        /^\d{1,2}[-/.]\d{1,2}[-/.]\d{2,4}(?:\s.*)?$/.test(clean) ||
+        /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/.test(clean)
+      );
+    }
+
+    function isLikelyCSVAmountCell(raw) {
+      const s = String(raw || "").replace(/['"]/g, "").trim();
+      if (!s || isCSVDateCell(s)) return false;
+      const withoutCurr = s.replace(/eur/gi, "");
+      if (/[a-zA-Z/]/.test(withoutCurr)) return false;
+      const stripped = withoutCurr.replace(/[\s\u00a0\u202f€$]/g, "");
+      return /^[+-]?(?:\d+[.,\d]*|\d*[.,]\d+)$/.test(stripped) && /\d/.test(stripped);
+    }
+
     function parseCSV(content) {
       const lines = content.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
       if (!lines.length) return [];
       const firstLine = lines[0];
       const sep = (firstLine.split(";").length >= firstLine.split(",").length) ? ";" : ",";
       const items = [];
+      const ignoredCols = new Set();
+      let seenDataRow = false;
+
       for (let i = 0; i < lines.length; i++) {
         const cols = splitCSVLine(lines[i], sep);
         if (cols.length < 3) continue;
+
+        const hasDateCell = cols.some(c => isCSVDateCell(c));
+        if (!seenDataRow && !hasDateCell) {
+          for (let c = 0; c < cols.length; c++) {
+            const hdr = cols[c].replace(/['"]/g, "").trim().toLowerCase();
+            if (hdr.includes("solde") || hdr.includes("balance")) {
+              ignoredCols.add(c);
+            }
+          }
+          continue;
+        }
+        if (hasDateCell) seenDataRow = true;
+
         let dateCol = -1;
         let amtCol = -1;
         for (let c = 0; c < cols.length; c++) {
-          const clean = cols[c].replace(/['"]/g, "");
-          if (dateCol === -1 && (/^\d{4}[-/]\d{1,2}[-/]\d{1,2}$/.test(clean) || /^\d{1,2}[-/.]\d{1,2}[-/.]\d{2,4}$/.test(clean))) {
-            dateCol = c;
+          if (ignoredCols.has(c)) continue;
+          const clean = cols[c].replace(/['"]/g, "").trim();
+          if (isCSVDateCell(clean)) {
+            if (dateCol === -1) dateCol = c;
+            continue;
           }
+          if (!isLikelyCSVAmountCell(clean)) continue;
           const num = parseAmountNum(clean);
-          if (!isNaN(num) && /\d/.test(clean)) {
+          if (!isNaN(num) && num !== 0) {
             amtCol = c;
           }
         }
         if (dateCol === -1 || amtCol === -1) continue;
         const amtNum = parseAmountNum(cols[amtCol]);
         if (isNaN(amtNum) || amtNum === 0) continue;
-        const labelParts = cols.filter((_, idx) => idx !== dateCol && idx !== amtCol && cols[idx].replace(/['"]/g, "") !== "");
+        const labelParts = cols.filter((_, idx) => idx !== dateCol && idx !== amtCol && !ignoredCols.has(idx) && cols[idx].replace(/['"]/g, "").trim() !== "");
         const label = labelParts.join(" - ").replace(/['"]/g, "").trim() || "Opération CSV";
         items.push({
           date: normalizeDateStr(cols[dateCol]),
@@ -3711,28 +3798,38 @@
           return;
         }
 
-        const newTxs = [];
-        let skipped = 0;
+        const makeMatchKey = (accId, date, type, amount, label) =>
+          `${accId}|${date}|${type}|${Number(amount).toFixed(2)}|${String(label || "").toLowerCase()}`;
+
+        const existingCounts = new Map();
+        for (const t of state.transactions) {
+          const key = makeMatchKey(t.accountId, t.date, t.type, t.amount, t.label);
+          existingCounts.set(key, (existingCounts.get(key) || 0) + 1);
+        }
+
+        const candidates = [];
+        const skippedItems = [];
         for (const item of parsed) {
           const cleanLabel = clampStr(item.label, 200) || "Opération importée";
-          const isDup = state.transactions.some(
-            t =>
-              t.accountId === accountId &&
-              t.date === item.date &&
-              t.type === item.type &&
-              Number(t.amount).toFixed(2) === Number(item.amount).toFixed(2) &&
-              t.label.toLowerCase() === cleanLabel.toLowerCase()
-          );
-          if (isDup) {
-            skipped++;
+          const safeAmt = Math.max(0.01, Number(Number(item.amount).toFixed(2)));
+          const key = makeMatchKey(accountId, item.date, item.type, safeAmt, cleanLabel);
+          const remaining = existingCounts.get(key) || 0;
+          if (remaining > 0) {
+            existingCounts.set(key, remaining - 1);
+            skippedItems.push({
+              date: item.date,
+              type: item.type,
+              amount: safeAmt,
+              label: cleanLabel
+            });
             continue;
           }
-          const tx = {
+          candidates.push({
             id: makeSafeId("tx", `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`),
             date: item.date,
             accountId,
             type: item.type,
-            amount: Math.max(0.01, Number(Number(item.amount).toFixed(2))),
+            amount: safeAmt,
             paymentMethod: state.paymentMethods[0] || "Carte bancaire",
             checkNumber: "",
             category,
@@ -3740,22 +3837,59 @@
             payee: "",
             label: cleanLabel,
             cleared
-          };
-          state.transactions.unshift(tx);
-          newTxs.push(tx);
+          });
+        }
+
+        const formatSkippedLine = s =>
+          `• ${formatDateFR(s.date)} | ${s.label} | ${s.type === "income" ? "+" : "-"}${formatEur(s.amount)}`;
+
+        if (!candidates.length) {
+          const maxSkipped = skippedItems.slice(0, 10);
+          const skippedList = maxSkipped.map(formatSkippedLine).join("\n");
+          const extra = skippedItems.length > 10 ? `\n... et ${skippedItems.length - 10} autre(s).` : "";
+          alert(`Aucune nouvelle opération à importer (${skippedItems.length} doublon(s) ignoré(s)).\n\nLignes ignorées (max 10) :\n${skippedList}${extra}`);
+          return;
+        }
+
+        let totalIncome = 0;
+        let totalExpense = 0;
+        for (const tx of candidates) {
+          if (tx.type === "income") totalIncome += tx.amount;
+          else totalExpense += tx.amount;
+        }
+
+        const previewLines = candidates.slice(0, 3).map(formatSkippedLine).join("\n");
+        const skippedInfo = skippedItems.length ? `\nDoublons ignorés : ${skippedItems.length}` : "";
+        const confirmMsg =
+          `Confirmer l'import de ${candidates.length} opération(s) ?\n` +
+          `Total des revenus : +${formatEur(totalIncome)}\n` +
+          `Total des dépenses : -${formatEur(totalExpense)}${skippedInfo}\n\n` +
+          `Aperçu (${Math.min(3, candidates.length)} ligne(s)) :\n${previewLines}`;
+
+        if (!confirm(confirmMsg)) return;
+
+        for (let i = candidates.length - 1; i >= 0; i--) {
+          state.transactions.unshift(candidates[i]);
         }
 
         state.transactions.sort((a, b) => b.date.localeCompare(a.date));
         closeStatementImportModal();
         saveLocalCache();
 
-        if (currentUser && db && newTxs.length) {
+        if (currentUser && db && candidates.length) {
           const uid = currentUser.uid;
-          const ops = newTxs.map(tx => ({ kind: "set", ref: txRef(uid, tx.id), data: buildTxPayload(uid, tx, true) }));
+          const ops = candidates.map(tx => ({ kind: "set", ref: txRef(uid, tx.id), data: buildTxPayload(uid, tx, true) }));
           commitBatchOps(ops, `users/${uid}/transactions`);
         }
 
-        alert(`Import terminé : ${newTxs.length} opération(s) ajoutée(s), ${skipped} doublon(s) ignoré(s).`);
+        let doneMsg = `Import terminé : ${candidates.length} opération(s) ajoutée(s), ${skippedItems.length} doublon(s) ignoré(s).`;
+        if (skippedItems.length > 0) {
+          const maxSkipped = skippedItems.slice(0, 10);
+          const skippedList = maxSkipped.map(formatSkippedLine).join("\n");
+          const extra = skippedItems.length > 10 ? `\n... et ${skippedItems.length - 10} autre(s).` : "";
+          doneMsg += `\n\nLignes ignorées (max 10) :\n${skippedList}${extra}`;
+        }
+        alert(doneMsg);
       };
       reader.readAsText(file, "UTF-8");
     }
@@ -3902,14 +4036,28 @@
     }
 
     function deleteTransaction(txId) {
+      const skippedChanged = addSkippedOccurrenceIds([txId]);
       state.transactions = state.transactions.filter(t => t.id !== txId);
       selectedTxIds.delete(txId);
       saveLocalCache();
 
       if (currentUser && db) {
-        cloudExec(OperationType.DELETE, `users/${currentUser.uid}/transactions/${txId}`, () =>
-          deleteDoc(txRef(currentUser.uid, txId))
-        );
+        const uid = currentUser.uid;
+        if (skippedChanged) {
+          const ops = [
+            { kind: "delete", ref: txRef(uid, txId) },
+            {
+              kind: "update",
+              ref: userRef(uid),
+              data: { skippedOccurrences: state.skippedOccurrences, updatedAt: serverTimestamp() }
+            }
+          ];
+          commitBatchOps(ops, `users/${uid}/transactions/${txId}`);
+        } else {
+          cloudExec(OperationType.DELETE, `users/${uid}/transactions/${txId}`, () =>
+            deleteDoc(txRef(uid, txId))
+          );
+        }
       }
     }
 
@@ -4060,8 +4208,11 @@
       return dateStr <= sch.endDate;
     }
 
-    function injectSchedulesForMonth(monthVal) {
+    function injectSchedulesForMonth(monthVal, { includeSkipped = false } = {}) {
       const injectedTxs = [];
+      const skippedSet = new Set(normalizeSkippedOccurrences(state.skippedOccurrences));
+      const unsuppressedIds = [];
+
       for (const sch of state.schedules) {
         if (!state.accounts.some(a => a.id === sch.accountId)) continue;
         const dayStr = String(Math.min(28, Math.max(1, sch.day))).padStart(2, "0");
@@ -4069,6 +4220,9 @@
         if (!isScheduleActiveForDate(sch, dateStr)) continue;
 
         const deterministicId = makeSafeId("tx-sch", `${sch.id}-${monthVal}`);
+        const isSkipped = skippedSet.has(deterministicId);
+        if (isSkipped && !includeSkipped) continue;
+
         const exists = state.transactions.some(
           t =>
             t.id === deterministicId ||
@@ -4094,15 +4248,34 @@
           };
           state.transactions.unshift(tx);
           injectedTxs.push(tx);
+          if (isSkipped) {
+            unsuppressedIds.push(deterministicId);
+          }
         }
       }
 
-      if (injectedTxs.length) {
-        state.transactions.sort((a, b) => b.date.localeCompare(a.date));
+      let skippedChanged = false;
+      if (unsuppressedIds.length) {
+        const toRemove = new Set(unsuppressedIds);
+        state.skippedOccurrences = normalizeSkippedOccurrences(state.skippedOccurrences).filter(id => !toRemove.has(id));
+        skippedChanged = true;
+      }
+
+      if (injectedTxs.length || skippedChanged) {
+        if (injectedTxs.length) {
+          state.transactions.sort((a, b) => b.date.localeCompare(a.date));
+        }
         saveLocalCache();
         if (currentUser && db) {
           const uid = currentUser.uid;
           const ops = injectedTxs.map(tx => ({ kind: "set", ref: txRef(uid, tx.id), data: buildTxPayload(uid, tx, true) }));
+          if (skippedChanged) {
+            ops.push({
+              kind: "update",
+              ref: userRef(uid),
+              data: { skippedOccurrences: state.skippedOccurrences, updatedAt: serverTimestamp() }
+            });
+          }
           commitBatchOps(ops, `users/${uid}/transactions`);
         }
       }
@@ -4120,7 +4293,7 @@
 
     function applySchedulesForCurrentMonth() {
       const monthVal = document.getElementById("filterMonth").value || getTodayLocalISO().slice(0, 7);
-      const added = injectSchedulesForMonth(monthVal);
+      const added = injectSchedulesForMonth(monthVal, { includeSkipped: true });
       saveLocalCache();
       alert(`${added} opération(s) injectée(s) pour ${monthVal}.`);
     }
