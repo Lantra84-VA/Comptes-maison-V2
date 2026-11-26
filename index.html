@@ -3329,9 +3329,9 @@
       const curBal = computeAccountBalances(accId);
       const bankStr = prompt(
         `Vérification de « ${acc.name} » — Solde indiqué par la banque (€) :`,
-        String(curBal.cleared.toFixed(2))
+        ""
       );
-      if (bankStr === null) return;
+      if (bankStr === null || !bankStr.trim()) return;
       const bankBalance = parseFloat(bankStr.trim().replace(/\s+/g, "").replace(",", "."));
       if (isNaN(bankBalance)) return;
 
