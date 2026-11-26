@@ -3321,6 +3321,63 @@
       }
     }
 
+    function verifyAccountBalancePrompt(accId, event) {
+      if (event) event.stopPropagation();
+      const acc = state.accounts.find(a => a.id === accId);
+      if (!acc) return;
+
+      const curBal = computeAccountBalances(accId);
+      const bankStr = prompt(
+        `Vérification de « ${acc.name} » — Solde indiqué par la banque (€) :`,
+        String(curBal.cleared.toFixed(2))
+      );
+      if (bankStr === null) return;
+      const bankBalance = parseFloat(bankStr.trim().replace(/\s+/g, "").replace(",", "."));
+      if (isNaN(bankBalance)) return;
+
+      const diff = bankBalance - curBal.cleared;
+      if (Math.abs(diff) < 0.005) {
+        alert("Le solde pointé correspond au solde de la banque.");
+        return;
+      }
+
+      const unclearedTxs = state.transactions.filter(t => t.accountId === accId && !t.cleared);
+      const unclearedTotal = unclearedTxs.reduce(
+        (sum, t) => sum + (t.type === "income" ? Number(t.amount) : -Number(t.amount)),
+        0
+      );
+      const matchingUncleared = unclearedTxs
+        .filter(t => {
+          const signedAmt = t.type === "income" ? Number(t.amount) : -Number(t.amount);
+          return Math.abs(signedAmt - diff) < 0.005;
+        })
+        .slice(0, 3);
+
+      const signedDiffStr = (diff > 0 ? "+" : "") + formatEur(diff);
+      const signedUnclearedTotalStr = (unclearedTotal > 0 ? "+" : "") + formatEur(unclearedTotal);
+
+      let msg =
+        `Vérification de « ${acc.name} »\n` +
+        `• Solde pointé (application) : ${formatEur(curBal.cleared)}\n` +
+        `• Solde banque : ${formatEur(bankBalance)}\n` +
+        `• Écart (banque - pointé) : ${signedDiffStr}\n` +
+        `• Opérations non pointées : ${unclearedTxs.length} (total : ${signedUnclearedTotalStr})`;
+
+      if (matchingUncleared.length > 0) {
+        const lines = matchingUncleared
+          .map(t => {
+            const signedAmt = t.type === "income" ? Number(t.amount) : -Number(t.amount);
+            const amtStr = (signedAmt > 0 ? "+" : "") + formatEur(signedAmt);
+            return `  - ${formatDateFR(t.date)} | ${t.label} | ${amtStr} (peut-être à pointer)`;
+          })
+          .join("\n");
+        msg += `\n\nOpération(s) non pointée(s) correspondant à l'écart (peut-être à pointer) :\n${lines}`;
+      }
+
+      msg += "\n\nUn écart vient souvent d'une opération oubliée, saisie en double ou non pointée. Utilisez Caler seulement après avoir cherché la cause.";
+      alert(msg);
+    }
+
     function calibrateAccountPrompt(accId, event) {
       if (event) event.stopPropagation();
       const acc = state.accounts.find(a => a.id === accId);
@@ -3332,7 +3389,7 @@
         String(curBal.cleared.toFixed(2))
       );
       if (clearedStr === null) return;
-      const targetCleared = parseFloat(clearedStr.replace(",", "."));
+      const targetCleared = parseFloat(clearedStr.trim().replace(/\s+/g, "").replace(",", "."));
       if (isNaN(targetCleared)) return;
 
       const currentStr = prompt(
@@ -3340,14 +3397,35 @@
         String(curBal.current.toFixed(2))
       );
       if (currentStr === null) return;
-      const targetCurrent = parseFloat(currentStr.replace(",", "."));
+      const targetCurrent = parseFloat(currentStr.trim().replace(/\s+/g, "").replace(",", "."));
       if (isNaN(targetCurrent)) return;
 
+      const oldInitialBalance = Number(acc.initialBalance || 0);
       const clearedDiff = targetCleared - curBal.cleared;
-      acc.initialBalance = Number(((acc.initialBalance || 0) + clearedDiff).toFixed(2));
+      const newInitialBalance = Number((oldInitialBalance + clearedDiff).toFixed(2));
 
       const projectedCurrent = Number((curBal.current + clearedDiff).toFixed(2));
       const adjDelta = Number((targetCurrent - projectedCurrent).toFixed(2));
+
+      if (Math.abs(clearedDiff) < 0.005 && Math.abs(adjDelta) < 0.005) {
+        alert("Aucun écart : rien à caler.");
+        return;
+      }
+
+      const adjLine = Math.abs(adjDelta) >= 0.005
+        ? `• Opération « Ajustement solde réel » créée : ${(adjDelta > 0 ? "+" : "") + formatEur(adjDelta)}\n`
+        : "";
+
+      const confirmMsg =
+        `Calage de « ${acc.name} »\n` +
+        `• Solde pointé : ${formatEur(curBal.cleared)} → ${formatEur(targetCleared)}\n` +
+        `• Solde initial : ${formatEur(oldInitialBalance)} → ${formatEur(newInitialBalance)}\n` +
+        adjLine +
+        `\nUn écart signifie souvent une opération oubliée ou en double : vérifiez d'abord vos opérations non pointées. Confirmer le calage ?`;
+
+      if (!confirm(confirmMsg)) return;
+
+      acc.initialBalance = newInitialBalance;
 
       let adjTx = null;
       if (Math.abs(adjDelta) >= 0.005) {
@@ -4602,6 +4680,7 @@
           clearedAll += bal.cleared;
           forecastAll += bal.forecast;
           const selected = state.selectedAccountId === acc.id ? "selected" : "";
+          const verifyBtn = `<button type="button" class="btn-small btn-outline" title="Comparer le solde pointé avec le solde du relevé bancaire" onclick="verifyAccountBalancePrompt('${acc.id}', event)">Vérifier</button>`;
           const calBtn = `<button type="button" class="btn-small btn-outline" title="Caler le solde pointé et le solde réel" onclick="calibrateAccountPrompt('${acc.id}', event)">Caler</button>`;
           const editBtn = `<button type="button" class="btn-edit" title="Modifier le nom ou le solde initial" onclick="editAccountPrompt('${acc.id}', event)">Modifier</button>`;
           const delBtn = canDeleteAcc
@@ -4617,6 +4696,7 @@
                 <div class="num-tabular ${bal.current >= 0 ? "pos" : "neg"}" style="font-weight:700;">
                   ${formatEur(bal.current)}
                 </div>
+                ${verifyBtn}
                 ${calBtn}
                 ${editBtn}
                 ${delBtn}
@@ -4877,6 +4957,7 @@
       quickAddPayee,
       addAccountPrompt,
       editAccountPrompt,
+      verifyAccountBalancePrompt,
       calibrateAccountPrompt,
       addCategoryForm,
       addSubcategoryForm,
