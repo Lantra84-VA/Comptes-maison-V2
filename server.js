@@ -4,7 +4,13 @@ const path = require('path');
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-app.use(express.static(path.join(__dirname)));
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'favicon.ico'));
+});
+
+app.get('/firebase-applet-config.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'firebase-applet-config.json'));
+});
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
